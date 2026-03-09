@@ -18,6 +18,7 @@
             --danger: #ef4444;
             --danger-hover: #dc2828;
             --warning: #f59e0b;
+            --warning-hover: #d97706;
             --border: #334155;
             --radius: 12px;
         }
@@ -90,31 +91,47 @@
         textarea { width: 100%; height: 180px; background-color: var(--bg-input); color: var(--text-main); border: 1px solid var(--border); border-radius: 8px; padding: 15px; font-family: 'Courier New', Courier, monospace; resize: vertical; box-sizing: border-box; outline: none; }
         textarea:focus { border-color: var(--primary); }
 
-        .button-group { display: flex; gap: 15px; margin-top: 15px; }
-        button { display: flex; align-items: center; justify-content: center; gap: 8px; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; flex: 1; transition: all 0.2s; }
+        .button-group { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
+        button { display: flex; align-items: center; justify-content: center; gap: 8px; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; flex: 1; transition: all 0.2s; min-width: 200px; }
         
         .btn-primary { background-color: var(--primary); }
         .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
-        .btn-danger { background-color: var(--danger); flex: 0.3; }
+        .btn-warning { background-color: var(--warning); color: #fff; }
+        .btn-warning:hover { background-color: var(--warning-hover); transform: translateY(-2px); }
+        .btn-danger { background-color: var(--danger); flex: 0.2; min-width: 60px; }
         .btn-danger:hover { background-color: var(--danger-hover); }
         .btn-success { background-color: var(--success); }
         .btn-success:hover { background-color: var(--success-hover); }
         
-        /* Кнопка завантаження проекту */
-        .btn-icon-only { flex: none; padding: 10px 15px; background-color: var(--success); }
+        .btn-icon-only { flex: none; padding: 10px 15px; background-color: var(--success); min-width: auto; }
         .btn-icon-only:hover { background-color: var(--success-hover); transform: translateY(-2px); }
 
         .log { margin-top: 20px; padding: 20px; background: #020617; border-radius: var(--radius); border: 1px solid var(--border); display: none; }
         .log h3 { margin-top: 0; color: white; display: flex; align-items: center; gap: 8px; }
         .log ul { padding-left: 0; list-style: none; margin: 0; }
-        .log li { padding: 8px 12px; margin-bottom: 8px; border-radius: 6px; font-size: 14px; }
+        .log li { padding: 12px; margin-bottom: 10px; border-radius: 6px; font-size: 14px; }
         
         .log-success { background-color: rgba(16, 185, 129, 0.1); color: var(--success); border-left: 4px solid var(--success); }
         .log-warning { background-color: rgba(245, 158, 11, 0.1); color: var(--warning); border-left: 4px solid var(--warning); }
         .log-error { background-color: rgba(239, 68, 68, 0.1); color: var(--danger); border-left: 4px solid var(--danger); }
         .log-info { background-color: rgba(99, 102, 241, 0.1); color: #818cf8; border-left: 4px solid var(--primary); }
+        .log-removed { background-color: rgba(220, 38, 38, 0.15); color: #fca5a5; border-left: 4px solid var(--danger); }
         
-        .small-text { font-size: 12px; opacity: 0.8; margin-top: 4px; display: block; font-family: monospace; }
+        .small-text { 
+            font-size: 13px; 
+            opacity: 0.9; 
+            margin-top: 8px; 
+            display: block; 
+            font-family: 'Courier New', Courier, monospace; 
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.4);
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
         .badge { background-color: var(--warning); color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
 
         svg { width: 20px; height: 20px; fill: currentColor; }
@@ -146,13 +163,9 @@
             <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
             <h3>Крок 1: Англійський оригінал (en_us.json)</h3>
         </div>
-        <p>Обов'язковий файл. Визначає структуру та порядок ключів.</p>
         <div class="file-upload-wrapper">
             <input type="file" id="originalFile" accept=".json" onchange="updateFileName('originalFile', 'originalName')">
-            <div class="file-btn">
-                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
-                Вибрати файл
-            </div>
+            <div class="file-btn">Вибрати файл</div>
             <span id="originalName" class="file-name">Файл не вибрано</span>
         </div>
     </div>
@@ -162,13 +175,9 @@
             <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
             <h3>Крок 2: Старий переклад <span class="badge" id="projectStatusBadge">Одноразовий</span></h3>
         </div>
-        <p>Якщо ви обрали проект, програма візьме переклад з пам'яті. Ви також можете завантажити файл вручну.</p>
         <div class="file-upload-wrapper">
             <input type="file" id="oldTranslationFile" accept=".json" onchange="updateFileName('oldTranslationFile', 'oldName')">
-            <div class="file-btn">
-                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
-                Завантажити вручну (необов'язково)
-            </div>
+            <div class="file-btn">Завантажити вручну</div>
             <span id="oldName" class="file-name">Немає файлу</span>
         </div>
     </div>
@@ -178,16 +187,20 @@
             <svg viewBox="0 0 24 24"><path d="M21 11.5v-1c0-3.8-3.1-7-7-7h-1V2c0-.6-.4-1-1-1s-1 .4-1 1v1.5h-1c-3.8 0-7 3.2-7 7v1H2v2h2v1c0 3.8 3.1 7 7 7h1v1.5c0 .6.4 1 1 1s1-.4 1-1V22h1c3.8 0 7-3.2 7-7v-1h2v-2h-2zm-10 7.5c-2.8 0-5-2.2-5-5v-1h10v1c0 2.8-2.2 5-5 5zm5-8H6v-1c0-2.8 2.2-5 5-5h2c2.8 0 5 2.2 5 5v1z"/></svg>
             <h3>Крок 3: Нові рядки від бота</h3>
         </div>
-        <p>Вставте сюди відповіді від ШІ. Вони мають найвищий пріоритет.</p>
+        <p>Сюди вставляй готові переклади, які зробив ШІ.</p>
         <textarea id="translatedText" placeholder='"block.hexcasting.slate": "Скрижаль", ...'></textarea>
     </div>
 
     <div class="button-group">
+        <button class="btn-warning" onclick="analyzeJSONs()">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            1. Аналізувати файли
+        </button>
         <button class="btn-primary" onclick="processTranslation()">
             <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            Зібрати JSON
+            2. Зібрати JSON
         </button>
-        <button class="btn-danger" onclick="resetForm()">
+        <button class="btn-danger" onclick="resetForm()" title="Очистити все">
             <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
     </div>
@@ -199,15 +212,9 @@
         </h3>
         <ul id="logMessages"></ul>
         
-        <div class="button-group">
-            <button id="downloadBtn" class="btn-success" style="display:none;" onclick="downloadJSON()">
-                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                Завантажити uk_ua.json
-            </button>
-            <button id="copyBtn" class="btn-success" style="display:none; background-color: var(--primary);" onclick="copyToClipboard()">
-                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                Копіювати код
-            </button>
+        <div class="button-group" id="downloadCopyGroup" style="display:none; margin-top: 15px;">
+            <button class="btn-success" onclick="downloadJSON()">Завантажити uk_ua.json</button>
+            <button id="copyBtn" class="btn-success" style="background-color: var(--primary);" onclick="copyToClipboard()">Копіювати код</button>
         </div>
     </div>
 
@@ -246,13 +253,7 @@
                 opt.textContent = `📁 ${name} (${Object.keys(projects[name].translation).length} ключів)`;
                 select.appendChild(opt);
             }
-            
-            // Відновлюємо попередній вибір, якщо він існує
-            if (currentValue === "_fast_" || projects[currentValue]) {
-                select.value = currentValue;
-            } else {
-                select.value = "_fast_";
-            }
+            select.value = (currentValue === "_fast_" || projects[currentValue]) ? currentValue : "_fast_";
         }
 
         function createProject() {
@@ -284,32 +285,17 @@
                 const keysCount = Object.keys(projects[currentProjectName].translation).length;
                 badge.textContent = `В пам'яті: ${keysCount} рядків`;
                 badge.style.backgroundColor = 'var(--success)';
-                
-                // Показуємо кнопку завантаження проекту, якщо в ньому є дані
                 downloadProjBtn.style.display = keysCount > 0 ? 'block' : 'none';
             }
         }
 
-        // Завантаження цілого збереженого проекту
         function downloadSavedProject() {
             if (currentProjectName === "_fast_" || !projects[currentProjectName]) return;
-            
             const data = projects[currentProjectName].translation;
-            if (Object.keys(data).length === 0) {
-                alert("Цей проект поки що порожній!");
-                return;
-            }
+            if (Object.keys(data).length === 0) return alert("Цей проект поки що порожній!");
             
             const jsonString = JSON.stringify(data, null, 2);
-            const blob = new Blob([jsonString], { type: "application/json;charset=utf-8" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${currentProjectName}_uk_ua.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            triggerDownload(jsonString, `${currentProjectName}_uk_ua.json`);
         }
 
         function updateFileName(inputId, spanId) {
@@ -339,16 +325,19 @@
             logMessages.appendChild(li);
         }
 
+        function clearLog() {
+            document.getElementById('logArea').style.display = 'block';
+            document.getElementById('logMessages').innerHTML = '';
+            document.getElementById('downloadCopyGroup').style.display = 'none';
+        }
+
         function resetForm() {
             document.getElementById('originalFile').value = '';
             document.getElementById('oldTranslationFile').value = '';
             document.getElementById('translatedText').value = '';
             updateFileName('originalFile', 'originalName');
             updateFileName('oldTranslationFile', 'oldName');
-            
             document.getElementById('logArea').style.display = 'none';
-            document.getElementById('downloadBtn').style.display = 'none';
-            document.getElementById('copyBtn').style.display = 'none';
             finalJsonString = "";
         }
 
@@ -364,44 +353,80 @@
             });
         }
 
-        async function processTranslation() {
-            document.getElementById('logArea').style.display = 'block';
-            document.getElementById('logMessages').innerHTML = '';
-            document.getElementById('downloadBtn').style.display = 'none';
-            document.getElementById('copyBtn').style.display = 'none';
-            finalJsonString = "";
-
+        async function getFilesData() {
             const originalFileInput = document.getElementById('originalFile');
             const oldTranslationFileInput = document.getElementById('oldTranslationFile');
-            const translatedText = document.getElementById('translatedText').value;
 
             if (originalFileInput.files.length === 0) {
-                log("Помилка: Не завантажено оригінальний файл (en_us.json)!", "log-error");
-                return;
+                throw new Error("Не завантажено оригінальний файл (en_us.json)!");
             }
 
+            const originalObj = await readFileAsJSON(originalFileInput.files[0]);
+            let oldTranslationObj = {};
+            
+            if (currentProjectName !== "_fast_" && projects[currentProjectName]) {
+                oldTranslationObj = projects[currentProjectName].translation || {};
+            }
+            if (oldTranslationFileInput.files.length > 0) {
+                oldTranslationObj = await readFileAsJSON(oldTranslationFileInput.files[0]);
+            }
+
+            return { originalObj, oldTranslationObj };
+        }
+
+        // --- НОВА ФУНКЦІЯ АНАЛІЗУ ---
+        async function analyzeJSONs() {
+            clearLog();
             try {
-                // 1. Читаємо оригінал
-                const originalObj = await readFileAsJSON(originalFileInput.files[0]);
-                
-                // 2. Визначаємо старий переклад
-                let oldTranslationObj = {};
-                
-                // Якщо обрано проект, підвантажуємо з нього
-                if (currentProjectName !== "_fast_" && projects[currentProjectName]) {
-                    oldTranslationObj = projects[currentProjectName].translation || {};
-                }
-                
-                if (oldTranslationFileInput.files.length > 0) {
-                    oldTranslationObj = await readFileAsJSON(oldTranslationFileInput.files[0]);
-                    log("Використано старий переклад із завантаженого файлу.", "log-info");
-                } else if (currentProjectName !== "_fast_") {
-                    log(`Завантажено старий переклад з проекту "${currentProjectName}" (${Object.keys(oldTranslationObj).length} ключів).`, "log-info");
-                } else {
-                    log("Швидкий режим: старий файл не завантажено.", "log-info");
+                const { originalObj, oldTranslationObj } = await getFilesData();
+
+                let missingKeys = [];
+                let missingJsonForBot = {};
+                let outdatedKeys = [];
+
+                // Аналіз неактуальних ключів
+                for (let key in oldTranslationObj) {
+                    if (!originalObj.hasOwnProperty(key)) {
+                        outdatedKeys.push(key);
+                    }
                 }
 
-                // 3. Читаємо текст від бота
+                // Аналіз нових ключів
+                for (let key in originalObj) {
+                    if (!oldTranslationObj.hasOwnProperty(key)) {
+                        missingKeys.push(key);
+                        missingJsonForBot[key] = originalObj[key];
+                    }
+                }
+
+                if (outdatedKeys.length > 0) {
+                    log(`❌ Знайдено неактуальних ключів: ${outdatedKeys.length}. Вони будуть проігноровані при збірці.`, "log-removed", outdatedKeys.join('\n'));
+                } else {
+                    log(`✅ Старі ключі повністю актуальні.`, "log-success");
+                }
+
+                if (missingKeys.length > 0) {
+                    const jsonStringForBot = JSON.stringify(missingJsonForBot, null, 2);
+                    log(`🆕 Треба перекласти (нових ключів: ${missingKeys.length}). Скопіюй цей текст і відправ боту:`, "log-warning", jsonStringForBot);
+                } else {
+                    log(`🎉 Немає нових рядків для перекладу. Все готово!`, "log-success");
+                }
+
+            } catch (error) {
+                log(`Помилка: ${error.message}`, "log-error");
+            }
+        }
+
+        // --- ФУНКЦІЯ ЗБІРКИ ---
+        async function processTranslation() {
+            clearLog();
+            finalJsonString = "";
+            const translatedText = document.getElementById('translatedText').value;
+
+            try {
+                const { originalObj, oldTranslationObj } = await getFilesData();
+
+                // Парсинг тексту від бота
                 const regex = /"([^"]+)"\s*:\s*"([^"\\]*(?:\\.[^"\\]*)*)"/g;
                 const newBotObj = {};
                 let match;
@@ -416,67 +441,64 @@
                 }
 
                 if (parsedBotCount > 0) {
-                    log(`Знайдено ${parsedBotCount} нових рядків у тексті (застосовано найвищий пріоритет).`, "log-success");
+                    log(`🤖 Зчитано ${parsedBotCount} перекладів з текстового поля.`, "log-info");
+                } else if (translatedText.trim() !== "") {
+                    log(`⚠️ Текст в полі є, але ключі не знайдено. Перевір формат JSON.`, "log-warning");
                 }
 
-                // 4. Збирання
+                // Збірка фінального об'єкту
                 const finalObj = {};
-                let missingKeys = [];
-                let fromBotCount = 0, fromOldCount = 0;
+                let stillMissingCount = 0;
 
                 for (let key in originalObj) {
                     if (newBotObj.hasOwnProperty(key)) {
                         finalObj[key] = newBotObj[key];
-                        fromBotCount++;
                     } else if (oldTranslationObj.hasOwnProperty(key)) {
                         finalObj[key] = oldTranslationObj[key];
-                        fromOldCount++;
                     } else {
-                        finalObj[key] = originalObj[key]; 
-                        missingKeys.push(key);
+                        finalObj[key] = originalObj[key]; // Залишаємо англійський оригінал
+                        stillMissingCount++;
                     }
                 }
 
-                // 5. ЗБЕРЕЖЕННЯ (якщо не швидкий режим)
+                if (stillMissingCount > 0) {
+                    log(`⚠️ Зібрано, але залишилось не перекладено ${stillMissingCount} ключів (вставлено англійський текст).`, "log-warning");
+                } else {
+                    log(`✅ Успішно зібрано! Всі ключі перекладено.`, "log-success");
+                }
+
+                // ЗБЕРЕЖЕННЯ
                 if (currentProjectName !== "_fast_") {
                     projects[currentProjectName].translation = finalObj;
                     saveProjectsToStorage();
                     updateProjectSelect();
                     document.getElementById('projectSelect').value = currentProjectName;
                     loadProjectInfo();
-                    log(`Проект "${currentProjectName}" успішно оновлено та збережено в пам'ять!`, "log-success");
-                } else {
-                    log(`Швидкий режим: файл зібрано (без збереження в пам'ять браузера).`, "log-success");
+                    log(`💾 Проект "${currentProjectName}" збережено в пам'ять браузера.`, "log-success");
                 }
                 
-                if (missingKeys.length > 0) {
-                    let sample = missingKeys.slice(0, 10).join(', ');
-                    if (missingKeys.length > 10) sample += ' ...';
-                    log(`Залишилось не перекладено: ${missingKeys.length} рядків.`, "log-warning", sample);
-                }
-
-                // Форматування з 2 ПРОБІЛАМИ
                 finalJsonString = JSON.stringify(finalObj, null, 2);
-                
-                document.getElementById('downloadBtn').style.display = 'flex';
-                document.getElementById('copyBtn').style.display = 'flex';
+                document.getElementById('downloadCopyGroup').style.display = 'flex';
 
             } catch (error) {
                 log(`Помилка: ${error.message}`, "log-error");
             }
         }
 
-        function downloadJSON() {
-            if (!finalJsonString) return;
-            const blob = new Blob([finalJsonString], { type: "application/json;charset=utf-8" });
+        function triggerDownload(content, filename) {
+            const blob = new Blob([content], { type: "application/json;charset=utf-8" });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = "uk_ua.json";
+            a.download = filename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        }
+
+        function downloadJSON() {
+            if (finalJsonString) triggerDownload(finalJsonString, "uk_ua.json");
         }
 
         function copyToClipboard() {
@@ -484,8 +506,7 @@
             navigator.clipboard.writeText(finalJsonString).then(() => {
                 const copyBtn = document.getElementById('copyBtn');
                 const originalHtml = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Скопійовано!';
-                
+                copyBtn.innerHTML = 'Скопійовано!';
                 setTimeout(() => { copyBtn.innerHTML = originalHtml; }, 2000);
             }).catch(err => alert("Помилка копіювання: " + err));
         }
