@@ -90,7 +90,6 @@
             font-size: 14px;
         }
 
-        /* Toast notifications */
         #toastContainer {
             position: fixed;
             top: 20px;
@@ -129,7 +128,6 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* Top Bar: Projects */
         .project-card {
             background-color: var(--bg-card);
             border: 1px solid var(--border);
@@ -179,7 +177,6 @@
             box-shadow: 0 0 0 3px var(--primary-glow);
         }
 
-        /* Steps Layout */
         .steps-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -257,7 +254,7 @@
 
         .file-dropzone:hover, .file-dropzone.dragover {
             border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.05);
+            background: rgba(99, 102, 241, 0.1);
         }
 
         .file-dropzone input[type="file"] {
@@ -268,10 +265,12 @@
             height: 100%;
             opacity: 0;
             cursor: pointer;
+            z-index: 5;
         }
 
         .file-dropzone-icon {
             margin-bottom: 8px;
+            pointer-events: none;
         }
 
         .file-dropzone-icon svg {
@@ -288,6 +287,7 @@
         .file-dropzone-text {
             font-size: 13px;
             color: var(--text-muted);
+            pointer-events: none;
         }
 
         .file-dropzone-name {
@@ -297,9 +297,9 @@
             word-break: break-all;
             margin-top: 6px;
             display: none;
+            pointer-events: none;
         }
 
-        /* Step 3: Textarea */
         .step-full {
             margin-bottom: 24px;
         }
@@ -345,6 +345,83 @@
             border-radius: 12px;
         }
 
+        .batch-config-box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .batch-config-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .batch-inputs-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .batch-char-input {
+            width: 140px;
+            min-width: 120px;
+            padding: 7px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #38bdf8;
+            background: #020617;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .preset-pills {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .preset-pill {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 4px 10px;
+            font-size: 11px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }
+
+        .preset-pill:hover, .preset-pill.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .batch-meta-tag {
+            font-size: 11px;
+            background: rgba(56, 189, 248, 0.12);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         textarea {
             width: 100%;
             height: 170px;
@@ -366,7 +443,6 @@
             box-shadow: 0 0 0 3px var(--primary-glow);
         }
 
-        /* Buttons */
         .button-bar {
             display: grid;
             grid-template-columns: 1.2fr 1.2fr auto;
@@ -453,52 +529,6 @@
             min-width: 44px;
         }
 
-        /* Stats & Logs */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .stat-box {
-            background: #0b1120;
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: var(--radius-md);
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 20px;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 4px;
-        }
-
-        .progress-bar-wrap {
-            width: 100%;
-            height: 6px;
-            background: #1e293b;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 12px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--warning), var(--success));
-            transition: width 0.4s ease;
-        }
-
         .log-section {
             background-color: var(--bg-card);
             border: 1px solid var(--border);
@@ -577,18 +607,165 @@
             border: 1px solid #334155;
             color: #94a3b8;
             font-size: 11px;
-            padding: 4px 8px;
+            padding: 6px 10px;
             border-radius: 4px;
             cursor: pointer;
             margin-top: 8px;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
+            font-weight: 600;
         }
 
         .copy-snippet-btn:hover {
             color: #fff;
             background: #334155;
+        }
+
+        .progress-dashboard {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 24px;
+            align-items: center;
+        }
+
+        @media (max-width: 680px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                text-align: center;
+            }
+        }
+
+        .circle-chart-wrap {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .circle-chart {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: #1e293b;
+            stroke-width: 10;
+        }
+
+        .circle-progress {
+            fill: none;
+            stroke: url(#progressGradient);
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke-dasharray: 326.73;
+            stroke-dashoffset: 326.73;
+            transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .circle-center-text {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .circle-pct {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .circle-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .dashboard-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .detail-card {
+            background: rgba(11, 17, 32, 0.8);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: border-color 0.2s;
+        }
+
+        .detail-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .detail-sub {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .strict-batch-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .action-row {
@@ -616,7 +793,7 @@
                 <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7.5l-10-5v10l10 5 10-5v-10l-10 5z"/></svg>
             </div>
             <h1>Minecraft JSON Builder PRO</h1>
-            <p class="subtitle">Швидка актуалізація, пошук нових ключів та складання якісних локалізацій для модів</p>
+            <p class="subtitle">Швидка актуалізація, пошук нових ключів та якісна локалізація модів</p>
         </header>
 
         <!-- Project Bar -->
@@ -630,7 +807,7 @@
                     <option value="_fast_">⚡ Швидкий сеанс (без збереження в пам'ять)</option>
                 </select>
 
-                <button id="downloadProjectBtn" class="btn-secondary btn-icon" style="display: none;" onclick="downloadSavedProject()" title="Завантажити поточний готовий JSON">
+                <button id="downloadProjectBtn" class="btn-secondary btn-icon" style="display: none;" onclick="downloadSavedProject()" title="Завантажити збережений переклад">
                     <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
                 </button>
 
@@ -655,7 +832,7 @@
                     <span class="badge badge-warning">Обов'язково</span>
                 </div>
                 <div class="file-dropzone" id="dropzoneOrig">
-                    <input type="file" id="originalFile" accept=".json" onchange="handleFileSelected('originalFile', 'dropzoneOrigText', 'dropzoneOrigName')">
+                    <input type="file" id="originalFile" accept=".json" onchange="handleFileSelected('originalFile')">
                     <div class="file-dropzone-icon">
                         <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
                     </div>
@@ -674,7 +851,7 @@
                     <span class="badge badge-warning" id="projectStatusBadge">Одноразовий</span>
                 </div>
                 <div class="file-dropzone" id="dropzoneOld">
-                    <input type="file" id="oldTranslationFile" accept=".json" onchange="handleFileSelected('oldTranslationFile', 'dropzoneOldText', 'dropzoneOldName')">
+                    <input type="file" id="oldTranslationFile" accept=".json" onchange="handleFileSelected('oldTranslationFile')">
                     <div class="file-dropzone-icon">
                         <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
                     </div>
@@ -684,7 +861,6 @@
             </div>
         </div>
 
-        <!-- Step 3 -->
         <div class="card step-full">
             <div class="textarea-header">
                 <div class="card-title">
@@ -697,7 +873,25 @@
                     <button class="btn-text" onclick="clearInputArea()" title="Очистити поле для наступного фрагменту">Очистити поле</button>
                 </div>
             </div>
-            <textarea id="translatedText" placeholder='Вставляйте сюди відповіді ШІ цілком або фрагментами (наприклад, по 50-100 рядків).&#10;При кожному натисканні "Зібрати" система збереже фрагмент і покаже, що ще залишилось перекласти!'></textarea>
+
+            <div class="batch-config-box">
+                <div class="batch-config-title">
+                    <span>✂️ Розумна нарізка порцій під ліміт ШІ</span>
+                    <span class="batch-meta-tag" id="batchCurrentCountBadge">Порція розраховується автоматично</span>
+                </div>
+                <div class="batch-inputs-row">
+                    <label style="font-size:12px; color:var(--text-muted);">Ліміт символів на 1 запит:</label>
+                    <input type="number" id="batchCharLimit" class="batch-char-input" value="3500" min="500" max="25000" step="500" onchange="onBatchLimitChange()">
+                    <div class="preset-pills">
+                        <span class="preset-pill" onclick="setBatchLimit(2000)">2 000</span>
+                        <span class="preset-pill active" onclick="setBatchLimit(3500)">3 500</span>
+                        <span class="preset-pill" onclick="setBatchLimit(5000)">5 000</span>
+                        <span class="preset-pill" onclick="setBatchLimit(8000)">8 000</span>
+                    </div>
+                </div>
+            </div>
+
+            <textarea id="translatedText" placeholder='Вставляйте сюди відповіді ШІ цілком або фрагментами (наприклад, по 50-100 рядків).&#10;При кожному натисканні "2. Застосувати фрагмент і зібрати" система збереже фрагмент і покаже наступну порцію!'></textarea>
         </div>
 
         <!-- Action Controls -->
@@ -715,7 +909,6 @@
             </button>
         </div>
 
-        <!-- Logs & Stats Section -->
         <div id="logArea" class="log-section">
             <div class="log-header">
                 <div class="log-title">
@@ -724,27 +917,60 @@
                 </div>
             </div>
 
-            <!-- Stats Boxes -->
-            <div class="stats-grid" id="statsGrid" style="display:none;">
-                <div class="stat-box">
-                    <div class="stat-value" id="statTotal">0</div>
-                    <div class="stat-label">Всього в оригіналі</div>
+            <div class="progress-dashboard" id="progressDashboard" style="display:none;">
+                <div class="dashboard-grid">
+                    <div class="circle-chart-wrap">
+                        <svg class="circle-chart" viewBox="0 0 120 120">
+                            <defs>
+                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#f59e0b" />
+                                    <stop offset="60%" stop-color="#6366f1" />
+                                    <stop offset="100%" stop-color="#10b981" />
+                                </linearGradient>
+                            </defs>
+                            <circle class="circle-bg" cx="60" cy="60" r="52" />
+                            <circle class="circle-progress" id="circleProgressBar" cx="60" cy="60" r="52" />
+                        </svg>
+                        <div class="circle-center-text">
+                            <div class="circle-pct" id="circlePctText">0%</div>
+                            <div class="circle-label">ПРОГРЕС</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-details">
+                        <div class="detail-card">
+                            <div class="detail-header">
+                                <span>📑 Рядки (ключі)</span>
+                            </div>
+                            <div class="detail-value" id="statKeysValue" style="color: #38bdf8;">0 / 0</div>
+                            <div class="detail-sub" id="statKeysSub">Перекладено 0%</div>
+                        </div>
+
+                        <div class="detail-card">
+                            <div class="detail-header">
+                                <span>🔤 Символи тексту</span>
+                            </div>
+                            <div class="detail-value" id="statCharsValue" style="color: #a78bfa;">0 / 0</div>
+                            <div class="detail-sub" id="statCharsSub">Обсяг готового тексту</div>
+                        </div>
+
+                        <div class="detail-card">
+                            <div class="detail-header">
+                                <span>✂️ Залишилось перекласти</span>
+                            </div>
+                            <div class="detail-value" id="statRemainingValue" style="color: var(--warning);">0 ключів</div>
+                            <div class="detail-sub" id="statRemainingSub">0 символів для черги ШІ</div>
+                        </div>
+
+                        <div class="detail-card">
+                            <div class="detail-header">
+                                <span>🗑️ Застарілі ключі</span>
+                            </div>
+                            <div class="detail-value" id="statOutdatedValue" style="color: #f87171;">0</div>
+                            <div class="detail-sub">Відсутні в оригіналі</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="statTranslated" style="color: var(--success);">0</div>
-                    <div class="stat-label">Перекладено</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="statMissing" style="color: var(--warning);">0</div>
-                    <div class="stat-label">Потребують ШІ</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="statOutdated" style="color: var(--danger);">0</div>
-                    <div class="stat-label">Видалені ключі</div>
-                </div>
-            </div>
-            <div class="progress-bar-wrap" id="progressWrap" style="display:none;">
-                <div class="progress-bar" id="progressBar"></div>
             </div>
 
             <ul id="logMessages" class="log-list" style="margin-top: 16px;"></ul>
@@ -762,6 +988,7 @@
         </div>
     </div>
 
+    <!-- Confirmation Modal (No alert/confirm) -->
     <div id="confirmModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:10000; align-items:center; justify-content:center; padding:16px;">
         <div style="background:#111827; border:1px solid #334155; border-radius:16px; max-width:400px; width:100%; padding:24px; box-shadow:0 20px 25px -5px rgba(0,0,0,0.6); text-align:center;">
             <div style="width:48px; height:48px; border-radius:50%; background:rgba(239,68,68,0.15); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; color:#ef4444;">
@@ -780,128 +1007,164 @@
         let projects = {};
         let currentProjectName = "_fast_";
         let finalJsonString = "";
-        let accumulatedTranslations = {}; // Накопичувальний словник для збірки частинами
+        let accumulatedTranslations = {};
         let loadedFiles = { original: null, old: null };
+        let activeMissingKeysMap = {};
+        let confirmActionCallback = null;
 
         window.onload = function() {
             setupDragAndDrop();
+            setupConfirmModal();
             loadProjectsFromStorage();
             updateProjectSelect();
             loadProjectInfo();
         };
 
-        // --- Custom Toast UI ---
-        function showToast(message, type = "info") {
-            const container = document.getElementById('toastContainer');
-            if (!container) return;
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
+        function setupConfirmModal() {
+            const cancelBtn = document.getElementById('confirmModalCancel');
+            const okBtn = document.getElementById('confirmModalOk');
             
-            let iconSvg = '';
-            if (type === 'success') {
-                iconSvg = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
-            } else if (type === 'error') {
-                iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>';
-            } else {
-                iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>';
-            }
-
-            toast.innerHTML = `${iconSvg} <span>${message}</span>`;
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(-10px)';
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
+            cancelBtn.onclick = closeConfirmModal;
+            okBtn.onclick = function() {
+                if (typeof confirmActionCallback === 'function') {
+                    confirmActionCallback();
+                }
+                closeConfirmModal();
+            };
         }
 
-        // --- Custom Confirm Dialog ---
-        let confirmCallback = null;
-        function showConfirmModal(title, text, onConfirm) {
-            const modal = document.getElementById('confirmModal');
+        function showConfirmModal(title, text, callback) {
             document.getElementById('confirmModalTitle').textContent = title;
             document.getElementById('confirmModalText').textContent = text;
-            confirmCallback = onConfirm;
-            modal.style.display = 'flex';
+            confirmActionCallback = callback;
+            document.getElementById('confirmModal').style.display = 'flex';
         }
 
-        document.getElementById('confirmModalCancel').onclick = function() {
+        function closeConfirmModal() {
             document.getElementById('confirmModal').style.display = 'none';
-            confirmCallback = null;
-        };
+            confirmActionCallback = null;
+        }
 
-        document.getElementById('confirmModalOk').onclick = function() {
-            document.getElementById('confirmModal').style.display = 'none';
-            if (confirmCallback) confirmCallback();
-            confirmCallback = null;
-        };
-
-        // --- Drag & Drop and File Selection Setup ---
-        function setupDragAndDrop() {
-            const dropzoneMap = [
-                { dropId: 'dropzoneOrig', inputId: 'originalFile', textId: 'dropzoneOrigText', nameId: 'dropzoneOrigName', fileKey: 'original' },
-                { dropId: 'dropzoneOld', inputId: 'oldTranslationFile', textId: 'dropzoneOldText', nameId: 'dropzoneOldName', fileKey: 'old' }
-            ];
-
-            dropzoneMap.forEach(cfg => {
-                const zone = document.getElementById(cfg.dropId);
-                const input = document.getElementById(cfg.inputId);
-                if (!zone || !input) return;
-
-                ['dragenter', 'dragover'].forEach(eventName => {
-                    zone.addEventListener(eventName, e => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        zone.classList.add('dragover');
-                    }, false);
-                });
-
-                ['dragleave'].forEach(eventName => {
-                    zone.addEventListener(eventName, e => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        zone.classList.remove('dragover');
-                    }, false);
-                });
-
-                zone.addEventListener('drop', e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    zone.classList.remove('dragover');
-                    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                        applyFile(e.dataTransfer.files[0], cfg.textId, cfg.nameId, cfg.fileKey);
-                    }
-                }, false);
+        function setBatchLimit(limit) {
+            document.getElementById('batchCharLimit').value = limit;
+            document.querySelectorAll('.preset-pill').forEach(pill => {
+                pill.classList.toggle('active', pill.textContent.replace(/\s+/g, '') === String(limit));
             });
+            onBatchLimitChange();
         }
 
-        function applyFile(file, textId, nameId, fileKey) {
-            if (!file.name.toLowerCase().endsWith('.json')) {
-                showToast("Оберіть файл з розширенням .json", "error");
-                return;
-            }
-
-            loadedFiles[fileKey] = file;
-            const textElem = document.getElementById(textId);
-            const nameElem = document.getElementById(nameId);
-
-            textElem.style.display = 'none';
-            nameElem.style.display = 'block';
-            nameElem.textContent = `✔ ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
-            showToast(`Файл "${file.name}" завантажено`, "success");
-        }
-
-        function handleFileSelected(inputId, textId, nameId) {
-            const input = document.getElementById(inputId);
-            const fileKey = inputId === 'originalFile' ? 'original' : 'old';
-            if (input.files && input.files[0]) {
-                applyFile(input.files[0], textId, nameId, fileKey);
+        function onBatchLimitChange() {
+            if (Object.keys(activeMissingKeysMap).length > 0) {
+                showBatchPrompt(activeMissingKeysMap, false);
             }
         }
 
-        // --- LocalStorage & Projects ---
+        function createCharacterBatch(missingMap, maxLimit) {
+            const keys = Object.keys(missingMap);
+            if (keys.length === 0) return null;
+
+            let currentBatchLines = [];
+            let currentChars = 0;
+            let includedKeysCount = 0;
+
+            for (let key of keys) {
+                const line = `  ${JSON.stringify(key)}: ${JSON.stringify(missingMap[key])},`;
+                const addedLen = line.length + 1;
+
+                if (includedKeysCount > 0 && (currentChars + addedLen) > maxLimit) {
+                    break;
+                }
+
+                currentBatchLines.push(line);
+                currentChars += addedLen;
+                includedKeysCount++;
+            }
+
+            const rawLinesText = currentBatchLines.join('\n');
+            const totalKeys = keys.length;
+            const remainingAfter = totalKeys - includedKeysCount;
+            const estimatedBatches = Math.ceil(totalKeys / includedKeysCount);
+
+            return {
+                rawLinesText,
+                charsCount: currentChars,
+                keysCount: includedKeysCount,
+                totalMissing: totalKeys,
+                remainingAfter,
+                estimatedBatches
+            };
+        }
+
+        function showBatchPrompt(missingMap, shouldScroll = true) {
+            activeMissingKeysMap = missingMap;
+            const charLimit = parseInt(document.getElementById('batchCharLimit').value, 10) || 3500;
+            const batch = createCharacterBatch(missingMap, charLimit);
+
+            if (!batch) return;
+
+            document.getElementById('batchCurrentCountBadge').textContent = 
+                `Порція: ${batch.keysCount} рядків (${batch.charsCount.toLocaleString()} / ${charLimit.toLocaleString()} симв.)`;
+
+            const promptWithInstruction = `Переклади ці рядки українською мовою для Minecraft мода.\nНе видаляй і не змінюй ліві ключі. Збережи без змін змінні %s, %d, {0} та кольорові коди §.\nПоверни виключно у форматі пар "ключ": "значення":\n\n{\n${batch.rawLinesText}\n}`;
+
+            const statusMsg = `✂️ <strong>Вам треба ще перекласти це</strong> (залишилось ${batch.totalMissing} неперекладених ключів).<br>` +
+                              `<span style="color:#94a3b8; font-size:12px;">Сайт відібрав <strong>${batch.keysCount} повних рядків</strong> (${batch.charsCount} симв. з ліміту ${charLimit}). ` +
+                              `<span class="strict-batch-badge">✔ Жоден рядок не обрізано</span> Залишиться ще ~${batch.remainingAfter} рядків (~${batch.estimatedBatches} порцій).</span>`;
+
+            log(statusMsg, "log-warning", promptWithInstruction, batch.rawLinesText);
+            if (shouldScroll) {
+                document.getElementById('logArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function calculateTextChars(obj) {
+            let total = 0;
+            for (let k in obj) {
+                if (obj[k] !== undefined && obj[k] !== null) {
+                    total += String(obj[k]).length;
+                }
+            }
+            return total;
+        }
+
+        function updateCircularDashboard(totalKeys, translatedKeys, totalTextChars, translatedTextChars, outdatedCount = 0) {
+            const dashboard = document.getElementById('progressDashboard');
+            dashboard.style.display = 'block';
+
+            const pct = totalKeys > 0 ? (translatedKeys / totalKeys) * 100 : 0;
+            const pctDisplay = pct % 1 === 0 ? pct.toFixed(0) : pct.toFixed(1);
+
+            const circleCircumference = 326.73;
+            const offset = circleCircumference - (pct / 100) * circleCircumference;
+            const circleBar = document.getElementById('circleProgressBar');
+            if (circleBar) {
+                circleBar.style.strokeDashoffset = offset;
+            }
+
+            document.getElementById('circlePctText').textContent = `${pctDisplay}%`;
+            document.getElementById('statKeysValue').textContent = `${translatedKeys.toLocaleString()} / ${totalKeys.toLocaleString()}`;
+            document.getElementById('statKeysSub').textContent = `Готово ${pctDisplay}% усіх ключів`;
+
+            const charsPct = totalTextChars > 0 ? ((translatedTextChars / totalTextChars) * 100).toFixed(1) : "0";
+            document.getElementById('statCharsValue').textContent = `${translatedTextChars.toLocaleString()} / ${totalTextChars.toLocaleString()}`;
+            document.getElementById('statCharsSub').textContent = `Символів: ${charsPct}% перекладено`;
+
+            const remainingKeys = Math.max(0, totalKeys - translatedKeys);
+            const remainingChars = Math.max(0, totalTextChars - translatedTextChars);
+            document.getElementById('statRemainingValue').textContent = `${remainingKeys.toLocaleString()} ключів`;
+            document.getElementById('statRemainingSub').textContent = `${remainingChars.toLocaleString()} симв. залишилось`;
+            document.getElementById('statOutdatedValue').textContent = outdatedCount.toLocaleString();
+        }
+
+        function clearLog() {
+            const logArea = document.getElementById('logArea');
+            logArea.style.display = 'block';
+            document.getElementById('logMessages').innerHTML = '';
+            document.getElementById('downloadCopyGroup').style.display = 'none';
+            document.getElementById('progressDashboard').style.display = 'none';
+            logArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
         function loadProjectsFromStorage() {
             const saved = localStorage.getItem('minecraftTranslationsDB');
             if (saved) {
@@ -951,8 +1214,8 @@
             if (currentProjectName === "_fast_" || !projects[currentProjectName]) return;
             showConfirmModal(
                 "Видалення проєкту",
-                `Ви точно хочете видалити проєкт "${currentProjectName}" разом із усіма збереженими ключами?`,
-                () => {
+                `Ви дійсно бажаєте видалити проєкт "${currentProjectName}" разом із усіма збереженими ключами?`,
+                function() {
                     delete projects[currentProjectName];
                     saveProjectsToStorage();
                     currentProjectName = "_fast_";
@@ -988,24 +1251,13 @@
         function downloadSavedProject() {
             if (currentProjectName === "_fast_" || !projects[currentProjectName]) return;
             const data = projects[currentProjectName].translation;
-            if (Object.keys(data).length === 0) return showToast("Цей проєкт ще порожній!", "warning");
+            if (!data || Object.keys(data).length === 0) return showToast("Цей проєкт поки що порожній!", "warning");
 
             const jsonString = JSON.stringify(data, null, 2);
             triggerDownload(jsonString, `${currentProjectName}_uk_ua.json`);
         }
 
-        // --- Log and Output Utilities ---
-        function clearLog() {
-            const logArea = document.getElementById('logArea');
-            logArea.style.display = 'block';
-            document.getElementById('logMessages').innerHTML = '';
-            document.getElementById('downloadCopyGroup').style.display = 'none';
-            document.getElementById('statsGrid').style.display = 'none';
-            document.getElementById('progressWrap').style.display = 'none';
-            logArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        function log(message, type = "log-success", codeSnippet = "") {
+        function log(message, type = "log-success", codeSnippet = "", rawLinesSnippet = "") {
             const logMessages = document.getElementById('logMessages');
             const li = document.createElement('li');
             li.className = `log-item ${type}`;
@@ -1021,20 +1273,131 @@
                 pre.textContent = codeSnippet;
                 li.appendChild(pre);
 
+                const btnsWrap = document.createElement('div');
+                btnsWrap.style.display = 'flex';
+                btnsWrap.style.gap = '8px';
+                btnsWrap.style.flexWrap = 'wrap';
+
                 const copyBtn = document.createElement('button');
                 copyBtn.className = "copy-snippet-btn";
-                copyBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Скопіювати для відправки боту`;
-                copyBtn.onclick = () => {
+                copyBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Скопіювати порцію для ШІ (з промптом)`;
+                copyBtn.onclick = function() {
                     executeCopy(codeSnippet);
-                    copyBtn.textContent = '✔ Скопійовано!';
+                    copyBtn.innerHTML = `✔ Скопійовано!`;
+                    showToast("Порцію з інструкцією скопійовано!", "success");
                     setTimeout(() => {
-                        copyBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Скопіювати для відправки боту`;
-                    }, 2000);
+                        copyBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Скопіювати порцію для ШІ (з промптом)`;
+                    }, 2200);
                 };
-                li.appendChild(copyBtn);
+                btnsWrap.appendChild(copyBtn);
+
+                if (rawLinesSnippet) {
+                    const copyRawBtn = document.createElement('button');
+                    copyRawBtn.className = "copy-snippet-btn";
+                    copyRawBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Тільки рядки від лапок до коми`;
+                    copyRawBtn.onclick = function() {
+                        executeCopy(rawLinesSnippet);
+                        copyRawBtn.innerHTML = `✔ Рядки скопійовано!`;
+                        showToast("Скопійовано тільки рядки без промпту", "info");
+                        setTimeout(() => {
+                            copyRawBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Тільки рядки від лапок до коми`;
+                        }, 2200);
+                    };
+                    btnsWrap.appendChild(copyRawBtn);
+                }
+
+                li.appendChild(btnsWrap);
             }
 
             logMessages.appendChild(li);
+        }
+
+        function setupDragAndDrop() {
+            ['dropzoneOrig', 'dropzoneOld'].forEach(zoneId => {
+                const zone = document.getElementById(zoneId);
+                if (!zone) return;
+                const fileType = zoneId === 'dropzoneOrig' ? 'original' : 'old';
+                const input = zone.querySelector('input[type="file"]');
+
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    zone.addEventListener(eventName, e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        zone.classList.add('dragover');
+                    }, false);
+                });
+
+                ['dragleave', 'dragend'].forEach(eventName => {
+                    zone.addEventListener(eventName, e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        zone.classList.remove('dragover');
+                    }, false);
+                });
+
+                zone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    zone.classList.remove('dragover');
+
+                    const files = e.dataTransfer && e.dataTransfer.files;
+                    if (files && files.length > 0) {
+                        const file = files[0];
+                        if (!file.name.toLowerCase().endsWith('.json')) {
+                            showToast("Оберіть файл з розширенням .json", "error");
+                            return;
+                        }
+                        loadedFiles[fileType] = file;
+                        try {
+                            const dt = new DataTransfer();
+                            dt.items.add(file);
+                            input.files = dt.files;
+                        } catch (err) {}
+                        updateFileDisplay(fileType, file);
+                        showToast(`Файл "${file.name}" завантажено`, "success");
+                    }
+                }, false);
+            });
+
+            window.addEventListener('dragover', e => e.preventDefault(), false);
+            window.addEventListener('drop', e => e.preventDefault(), false);
+        }
+
+        function handleFileSelected(inputId) {
+            const input = document.getElementById(inputId);
+            const fileType = inputId === 'originalFile' ? 'original' : 'old';
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                if (!file.name.toLowerCase().endsWith('.json')) {
+                    showToast("Оберіть файл з розширенням .json", "error");
+                    input.value = "";
+                    loadedFiles[fileType] = null;
+                    updateFileDisplay(fileType, null);
+                    return;
+                }
+                loadedFiles[fileType] = file;
+                updateFileDisplay(fileType, file);
+                showToast(`Файл "${file.name}" завантажено`, "success");
+            }
+        }
+
+        function updateFileDisplay(fileType, file) {
+            const textId = fileType === 'original' ? 'dropzoneOrigText' : 'dropzoneOldText';
+            const nameId = fileType === 'original' ? 'dropzoneOrigName' : 'dropzoneOldName';
+            const textElem = document.getElementById(textId);
+            const nameElem = document.getElementById(nameId);
+            if (!textElem || !nameElem) return;
+
+            if (file) {
+                textElem.style.display = 'none';
+                nameElem.style.display = 'block';
+                const sizeKb = (file.size / 1024).toFixed(1);
+                nameElem.textContent = `✔ ${file.name} (${sizeKb} KB)`;
+            } else {
+                textElem.style.display = 'block';
+                nameElem.style.display = 'none';
+                nameElem.textContent = '';
+            }
         }
 
         function clearInputArea() {
@@ -1050,18 +1413,16 @@
             loadedFiles.original = null;
             loadedFiles.old = null;
 
-            document.getElementById('dropzoneOrigText').style.display = 'block';
-            document.getElementById('dropzoneOrigName').style.display = 'none';
-            document.getElementById('dropzoneOldText').style.display = 'block';
-            document.getElementById('dropzoneOldName').style.display = 'none';
+            updateFileDisplay('original', null);
+            updateFileDisplay('old', null);
 
             accumulatedTranslations = {};
+            activeMissingKeysMap = {};
             document.getElementById('logArea').style.display = 'none';
             finalJsonString = "";
-            showToast("Форму та завантажені файли очищено!", "info");
+            showToast("Форму та файли очищено!", "info");
         }
 
-        // --- File Reading and BOM Handling ---
         function readFileAsJSON(file) {
             return new Promise((resolve, reject) => {
                 if (!file) return reject(new Error("Файл не вибрано"));
@@ -1069,22 +1430,20 @@
                 reader.onload = e => {
                     try {
                         let text = e.target.result;
-                        // Видаляємо UTF-8 BOM (\uFEFF) якщо файл збережено у Windows Notepad
                         text = text.replace(/^\uFEFF/, '').trim();
 
                         try {
                             const parsed = JSON.parse(text);
                             resolve(parsed);
                         } catch (parseErr) {
-                            // Очищення висячих ком або однорядкових коментарів
                             const sanitized = text
-                                .replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/gm, '')
+                                .replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/gm, '$1')
                                 .replace(/,(\s*[}\]])/g, '$1');
                             const parsed = JSON.parse(sanitized);
                             resolve(parsed);
                         }
                     } catch (err) {
-                        reject(new Error(`Файл "${file.name}" має синтаксичну помилку в JSON: ${err.message}`));
+                        reject(new Error(`Файл "${file.name}" має помилку в синтаксисі JSON: ${err.message}`));
                     }
                 };
                 reader.onerror = () => reject(new Error(`Помилка зчитування файлу "${file.name}"`));
@@ -1093,8 +1452,8 @@
         }
 
         async function getFilesData() {
-            const originalInput = document.getElementById('originalFile');
-            const origFile = loadedFiles.original || (originalInput.files && originalInput.files[0]);
+            const origInput = document.getElementById('originalFile');
+            const origFile = loadedFiles.original || (origInput.files && origInput.files[0]);
 
             if (!origFile) {
                 throw new Error("Будь ласка, завантажте файл оригіналу (en_us.json) у Крок 1");
@@ -1114,13 +1473,10 @@
                 oldTranslationObj = { ...oldTranslationObj, ...uploadedOld };
             }
 
-            // Синхронізуємо зі збереженими раніше частинами
             accumulatedTranslations = { ...oldTranslationObj, ...accumulatedTranslations };
-
             return { originalObj, oldTranslationObj: accumulatedTranslations };
         }
 
-        // --- 1. Аналіз JSON файлів ---
         async function analyzeJSONs() {
             clearLog();
             try {
@@ -1134,6 +1490,9 @@
                 const origKeys = Object.keys(originalObj);
                 const totalKeys = origKeys.length;
 
+                let totalTextChars = 0;
+                let translatedTextChars = 0;
+
                 for (let key in oldTranslationObj) {
                     if (!Object.prototype.hasOwnProperty.call(originalObj, key)) {
                         outdatedKeys.push(key);
@@ -1141,24 +1500,19 @@
                 }
 
                 for (let key of origKeys) {
+                    const charLen = String(originalObj[key] || "").length;
+                    totalTextChars += charLen;
+
                     if (Object.prototype.hasOwnProperty.call(oldTranslationObj, key)) {
                         translatedCount++;
+                        translatedTextChars += charLen;
                     } else {
                         missingKeys.push(key);
                         missingJsonForBot[key] = originalObj[key];
                     }
                 }
 
-                // Відображення плашок статистики
-                document.getElementById('statsGrid').style.display = 'grid';
-                document.getElementById('progressWrap').style.display = 'block';
-                document.getElementById('statTotal').textContent = totalKeys;
-                document.getElementById('statTranslated').textContent = translatedCount;
-                document.getElementById('statMissing').textContent = missingKeys.length;
-                document.getElementById('statOutdated').textContent = outdatedKeys.length;
-
-                const percentage = totalKeys > 0 ? Math.round((translatedCount / totalKeys) * 100) : 0;
-                document.getElementById('progressBar').style.width = `${percentage}%`;
+                updateCircularDashboard(totalKeys, translatedCount, totalTextChars, translatedTextChars, outdatedKeys.length);
 
                 if (outdatedKeys.length > 0) {
                     log(`⚠️ Застарілих ключів у старій локалізації: ${outdatedKeys.length}. Вони відсутні в оригіналі та будуть відсіяні.`, "log-removed", outdatedKeys.slice(0, 100).join('\n') + (outdatedKeys.length > 100 ? `\n...ще ${outdatedKeys.length - 100} ключів` : ''));
@@ -1167,9 +1521,9 @@
                 }
 
                 if (missingKeys.length > 0) {
-                    const promptSuggestion = `Переклади ці рядки українською мовою для Minecraft мода. Збережи точні назви ключів, змінні типу %s, %d, {0} та кольорові коди §. Поверни виключно валідний JSON:\n\n` + JSON.stringify(missingJsonForBot, null, 2);
-                    log(`⚡ Потрібно перекласти нових ключів: ${missingKeys.length} (${100 - percentage}% мода). Скопіюйте текст нижче та відправте штучному інтелекту:`, "log-warning", promptSuggestion);
+                    showBatchPrompt(missingJsonForBot);
                 } else {
+                    activeMissingKeysMap = {};
                     log(`🎉 Чудово! Всі ${totalKeys} ключів вже мають переклад. Можна збирати фінальний файл!`, "log-success");
                 }
 
@@ -1179,7 +1533,6 @@
             }
         }
 
-        // --- 2. Поетапна збірка перекладу ---
         async function processTranslation() {
             clearLog();
             finalJsonString = "";
@@ -1189,7 +1542,6 @@
                 const { originalObj, oldTranslationObj } = await getFilesData();
                 const newBotObj = {};
 
-                // Спроба 1: Розпарсити напряму як чистий JSON
                 let parsedDirectly = false;
                 try {
                     const trimmed = translatedText.trim();
@@ -1202,7 +1554,6 @@
                     }
                 } catch (e) {}
 
-                // Спроба 2: Regex парсинг пар "key": "value"
                 if (!parsedDirectly && translatedText.trim()) {
                     const regex = /"([^"]+)"\s*:\s*"((?:[^"\\]|\\.)*)"/g;
                     let match;
@@ -1226,20 +1577,27 @@
                     log(`⚠️ Не вдалося розпізнати пари "ключ": "значення" у вставленому тексті. Перевірте лапки.`, "log-warning");
                 }
 
-                // Формуємо фінальний об'єкт у порядку оригіналу та визначаємо залишок
                 const finalObj = {};
                 const remainingToTranslate = {};
                 let stillMissingCount = 0;
                 let fromBotCount = 0;
                 let fromOldCount = 0;
 
+                let totalTextChars = 0;
+                let translatedTextChars = 0;
+
                 for (let key in originalObj) {
+                    const charLen = String(originalObj[key] || "").length;
+                    totalTextChars += charLen;
+
                     if (Object.prototype.hasOwnProperty.call(accumulatedTranslations, key)) {
                         finalObj[key] = accumulatedTranslations[key];
                         fromBotCount++;
+                        translatedTextChars += charLen;
                     } else if (Object.prototype.hasOwnProperty.call(oldTranslationObj, key)) {
                         finalObj[key] = oldTranslationObj[key];
                         fromOldCount++;
+                        translatedTextChars += charLen;
                     } else {
                         finalObj[key] = originalObj[key];
                         remainingToTranslate[key] = originalObj[key];
@@ -1250,29 +1608,19 @@
                 const totalKeys = Object.keys(originalObj).length;
                 const translatedTotal = totalKeys - stillMissingCount;
 
-                // Оновлення статистики
-                document.getElementById('statsGrid').style.display = 'grid';
-                document.getElementById('progressWrap').style.display = 'block';
-                document.getElementById('statTotal').textContent = totalKeys;
-                document.getElementById('statTranslated').textContent = translatedTotal;
-                document.getElementById('statMissing').textContent = stillMissingCount;
-                document.getElementById('statOutdated').textContent = "0";
+                updateCircularDashboard(totalKeys, translatedTotal, totalTextChars, translatedTextChars, 0);
 
-                const percentage = totalKeys > 0 ? Math.round((translatedTotal / totalKeys) * 100) : 0;
-                document.getElementById('progressBar').style.width = `${percentage}%`;
-
-                // Якщо ще залишились неперекладені рядки
                 if (stillMissingCount > 0) {
-                    const remainingPrompt = `Переклади ці рядки українською мовою для Minecraft мода. Збережи назви ключів, %s, %d, {0} та § коди. Надай тільки JSON:\n\n` + JSON.stringify(remainingToTranslate, null, 2);
-                    log(`⚠️ Вам треба ще перекласти це (залишилось неперекладених ключів: ${stillMissingCount} із ${totalKeys}). Скопіюйте їх нижче для ШІ:`, "log-warning", remainingPrompt);
+                    showBatchPrompt(remainingToTranslate);
                     document.getElementById('translatedText').value = '';
-                    showToast(`Залишилось перекласти: ${stillMissingCount} рядків. Скопіюйте їх для бота!`, "warning");
+                    showToast(`Залишилось ${stillMissingCount} рядків. Наступну порцію сформовано!`, "warning");
                 } else {
+                    activeMissingKeysMap = {};
+                    document.getElementById('batchCurrentCountBadge').textContent = 'Всі рядки перекладено (100%)';
                     log(`🎉 Вітаємо! Локалізацію повністю завершено (100%). Всі ${totalKeys} ключів перекладено!`, "log-success");
                     showToast("Переклад завершено на 100%!", "success");
                 }
 
-                // Збереження в проєкт
                 if (currentProjectName !== "_fast_") {
                     projects[currentProjectName].translation = accumulatedTranslations;
                     saveProjectsToStorage();
@@ -1291,7 +1639,6 @@
             }
         }
 
-        // --- Експорт та буфер обміну ---
         function triggerDownload(content, filename) {
             const blob = new Blob([content], { type: "application/json;charset=utf-8" });
             const url = URL.createObjectURL(blob);
@@ -1340,6 +1687,31 @@
         function insertMockData() {
             document.getElementById('translatedText').value = `{\n  "block.hexcasting.slate": "Сланцева скрижаль",\n  "item.hexcasting.wand": "Чарівний жезл кастування",\n  "spell.hexcasting.teleport": "Телепортація крізь простір"\n}`;
             showToast("Приклад вставлено в поле перекладу", "info");
+        }
+
+        function showToast(message, type = "info") {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            let iconSvg = '';
+            if (type === 'success') {
+                iconSvg = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+            } else if (type === 'error') {
+                iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>';
+            } else {
+                iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>';
+            }
+
+            toast.innerHTML = `${iconSvg} <span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
         }
     </script>
 </body>
