@@ -762,11 +762,26 @@
         </div>
     </div>
 
+    <div id="confirmModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:10000; align-items:center; justify-content:center; padding:16px;">
+        <div style="background:#111827; border:1px solid #334155; border-radius:16px; max-width:400px; width:100%; padding:24px; box-shadow:0 20px 25px -5px rgba(0,0,0,0.6); text-align:center;">
+            <div style="width:48px; height:48px; border-radius:50%; background:rgba(239,68,68,0.15); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; color:#ef4444;">
+                <svg viewBox="0 0 24 24" style="width:28px; height:28px; fill:currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </div>
+            <h3 style="font-size:18px; font-weight:700; color:#f8fafc; margin-bottom:8px;" id="confirmModalTitle">Підтвердження</h3>
+            <p style="font-size:14px; color:#94a3b8; margin-bottom:20px;" id="confirmModalText">Ви дійсно хочете виконати цю дію?</p>
+            <div style="display:flex; gap:12px; justify-content:center;">
+                <button class="btn-secondary" id="confirmModalCancel" style="flex:1;">Скасувати</button>
+                <button class="btn-danger" id="confirmModalOk" style="flex:1; background-color:#ef4444; color:#fff;">Видалити</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let projects = {};
         let currentProjectName = "_fast_";
         let finalJsonString = "";
         let accumulatedTranslations = {}; // Накопичувальний словник для збірки частинами
+        let loadedFiles = { original: null, old: null };
 
         window.onload = function() {
             setupDragAndDrop();
@@ -775,9 +790,10 @@
             loadProjectInfo();
         };
 
-        // --- Custom Toast UI (Заміна alert) ---
+        // --- Custom Toast UI ---
         function showToast(message, type = "info") {
             const container = document.getElementById('toastContainer');
+            if (!container) return;
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             
@@ -801,44 +817,87 @@
             }, 3500);
         }
 
-        // --- Drag and Drop Setup ---
+        // --- Custom Confirm Dialog ---
+        let confirmCallback = null;
+        function showConfirmModal(title, text, onConfirm) {
+            const modal = document.getElementById('confirmModal');
+            document.getElementById('confirmModalTitle').textContent = title;
+            document.getElementById('confirmModalText').textContent = text;
+            confirmCallback = onConfirm;
+            modal.style.display = 'flex';
+        }
+
+        document.getElementById('confirmModalCancel').onclick = function() {
+            document.getElementById('confirmModal').style.display = 'none';
+            confirmCallback = null;
+        };
+
+        document.getElementById('confirmModalOk').onclick = function() {
+            document.getElementById('confirmModal').style.display = 'none';
+            if (confirmCallback) confirmCallback();
+            confirmCallback = null;
+        };
+
+        // --- Drag & Drop and File Selection Setup ---
         function setupDragAndDrop() {
-            ['dropzoneOrig', 'dropzoneOld'].forEach(id => {
-                const zone = document.getElementById(id);
+            const dropzoneMap = [
+                { dropId: 'dropzoneOrig', inputId: 'originalFile', textId: 'dropzoneOrigText', nameId: 'dropzoneOrigName', fileKey: 'original' },
+                { dropId: 'dropzoneOld', inputId: 'oldTranslationFile', textId: 'dropzoneOldText', nameId: 'dropzoneOldName', fileKey: 'old' }
+            ];
+
+            dropzoneMap.forEach(cfg => {
+                const zone = document.getElementById(cfg.dropId);
+                const input = document.getElementById(cfg.inputId);
+                if (!zone || !input) return;
+
                 ['dragenter', 'dragover'].forEach(eventName => {
                     zone.addEventListener(eventName, e => {
                         e.preventDefault();
+                        e.stopPropagation();
                         zone.classList.add('dragover');
                     }, false);
                 });
-                ['dragleave', 'drop'].forEach(eventName => {
+
+                ['dragleave'].forEach(eventName => {
                     zone.addEventListener(eventName, e => {
                         e.preventDefault();
+                        e.stopPropagation();
                         zone.classList.remove('dragover');
                     }, false);
                 });
+
+                zone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    zone.classList.remove('dragover');
+                    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                        applyFile(e.dataTransfer.files[0], cfg.textId, cfg.nameId, cfg.fileKey);
+                    }
+                }, false);
             });
+        }
+
+        function applyFile(file, textId, nameId, fileKey) {
+            if (!file.name.toLowerCase().endsWith('.json')) {
+                showToast("Оберіть файл з розширенням .json", "error");
+                return;
+            }
+
+            loadedFiles[fileKey] = file;
+            const textElem = document.getElementById(textId);
+            const nameElem = document.getElementById(nameId);
+
+            textElem.style.display = 'none';
+            nameElem.style.display = 'block';
+            nameElem.textContent = `✔ ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            showToast(`Файл "${file.name}" завантажено`, "success");
         }
 
         function handleFileSelected(inputId, textId, nameId) {
             const input = document.getElementById(inputId);
-            const textElem = document.getElementById(textId);
-            const nameElem = document.getElementById(nameId);
-
+            const fileKey = inputId === 'originalFile' ? 'original' : 'old';
             if (input.files && input.files[0]) {
-                const file = input.files[0];
-                if (!file.name.endsWith('.json')) {
-                    showToast("Оберіть файл з розширенням .json", "error");
-                    input.value = "";
-                    return;
-                }
-                textElem.style.display = 'none';
-                nameElem.style.display = 'block';
-                nameElem.textContent = `✔ ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
-                showToast(`Файл "${file.name}" завантажено`, "success");
-            } else {
-                textElem.style.display = 'block';
-                nameElem.style.display = 'none';
+                applyFile(input.files[0], textId, nameId, fileKey);
             }
         }
 
@@ -890,14 +949,18 @@
 
         function deleteCurrentProject() {
             if (currentProjectName === "_fast_" || !projects[currentProjectName]) return;
-            if (confirm(`Ви точно хочете видалити проєкт "${currentProjectName}" разом із усіма збереженими ключами?`)) {
-                delete projects[currentProjectName];
-                saveProjectsToStorage();
-                currentProjectName = "_fast_";
-                updateProjectSelect();
-                loadProjectInfo();
-                showToast("Проєкт успішно видалено!", "info");
-            }
+            showConfirmModal(
+                "Видалення проєкту",
+                `Ви точно хочете видалити проєкт "${currentProjectName}" разом із усіма збереженими ключами?`,
+                () => {
+                    delete projects[currentProjectName];
+                    saveProjectsToStorage();
+                    currentProjectName = "_fast_";
+                    updateProjectSelect();
+                    loadProjectInfo();
+                    showToast("Проєкт успішно видалено!", "info");
+                }
+            );
         }
 
         function loadProjectInfo() {
@@ -931,7 +994,7 @@
             triggerDownload(jsonString, `${currentProjectName}_uk_ua.json`);
         }
 
-        // --- Log and Display Utilities ---
+        // --- Log and Output Utilities ---
         function clearLog() {
             const logArea = document.getElementById('logArea');
             logArea.style.display = 'block';
@@ -968,6 +1031,12 @@
                         copyBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Скопіювати для відправки боту`;
                     }, 2000);
                 };
+                li.appendChild(copyBtn);
+            }
+
+            logMessages.appendChild(li);
+        }
+
         function clearInputArea() {
             document.getElementById('translatedText').value = '';
             showToast("Поле вводу очищено для наступного фрагменту", "info");
@@ -978,24 +1047,44 @@
             document.getElementById('oldTranslationFile').value = '';
             document.getElementById('translatedText').value = '';
 
-            handleFileSelected('originalFile', 'dropzoneOrigText', 'dropzoneOrigName');
-            handleFileSelected('oldTranslationFile', 'dropzoneOldText', 'dropzoneOldName');
+            loadedFiles.original = null;
+            loadedFiles.old = null;
+
+            document.getElementById('dropzoneOrigText').style.display = 'block';
+            document.getElementById('dropzoneOrigName').style.display = 'none';
+            document.getElementById('dropzoneOldText').style.display = 'block';
+            document.getElementById('dropzoneOldName').style.display = 'none';
 
             accumulatedTranslations = {};
             document.getElementById('logArea').style.display = 'none';
             finalJsonString = "";
-            showToast("Форму та накопичені фрагменти очищено!", "info");
+            showToast("Форму та завантажені файли очищено!", "info");
         }
 
+        // --- File Reading and BOM Handling ---
         function readFileAsJSON(file) {
             return new Promise((resolve, reject) => {
+                if (!file) return reject(new Error("Файл не вибрано"));
                 const reader = new FileReader();
                 reader.onload = e => {
                     try {
-                        const parsed = JSON.parse(e.target.result);
-                        resolve(parsed);
+                        let text = e.target.result;
+                        // Видаляємо UTF-8 BOM (\uFEFF) якщо файл збережено у Windows Notepad
+                        text = text.replace(/^\uFEFF/, '').trim();
+
+                        try {
+                            const parsed = JSON.parse(text);
+                            resolve(parsed);
+                        } catch (parseErr) {
+                            // Очищення висячих ком або однорядкових коментарів
+                            const sanitized = text
+                                .replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/gm, '')
+                                .replace(/,(\s*[}\]])/g, '$1');
+                            const parsed = JSON.parse(sanitized);
+                            resolve(parsed);
+                        }
                     } catch (err) {
-                        reject(new Error(`Файл "${file.name}" має синтаксичну помилку в JSON`));
+                        reject(new Error(`Файл "${file.name}" має синтаксичну помилку в JSON: ${err.message}`));
                     }
                 };
                 reader.onerror = () => reject(new Error(`Помилка зчитування файлу "${file.name}"`));
@@ -1004,22 +1093,24 @@
         }
 
         async function getFilesData() {
-            const originalFileInput = document.getElementById('originalFile');
-            const oldTranslationFileInput = document.getElementById('oldTranslationFile');
+            const originalInput = document.getElementById('originalFile');
+            const origFile = loadedFiles.original || (originalInput.files && originalInput.files[0]);
 
-            if (originalFileInput.files.length === 0) {
+            if (!origFile) {
                 throw new Error("Будь ласка, завантажте файл оригіналу (en_us.json) у Крок 1");
             }
 
-            const originalObj = await readFileAsJSON(originalFileInput.files[0]);
+            const originalObj = await readFileAsJSON(origFile);
             let oldTranslationObj = {};
 
             if (currentProjectName !== "_fast_" && projects[currentProjectName]) {
                 oldTranslationObj = { ...(projects[currentProjectName].translation || {}) };
             }
 
-            if (oldTranslationFileInput.files.length > 0) {
-                const uploadedOld = await readFileAsJSON(oldTranslationFileInput.files[0]);
+            const oldInput = document.getElementById('oldTranslationFile');
+            const oldFile = loadedFiles.old || (oldInput.files && oldInput.files[0]);
+            if (oldFile) {
+                const uploadedOld = await readFileAsJSON(oldFile);
                 oldTranslationObj = { ...oldTranslationObj, ...uploadedOld };
             }
 
@@ -1029,7 +1120,7 @@
             return { originalObj, oldTranslationObj: accumulatedTranslations };
         }
 
-        // --- 1. Аналіз JSONs ---
+        // --- 1. Аналіз JSON файлів ---
         async function analyzeJSONs() {
             clearLog();
             try {
@@ -1088,7 +1179,7 @@
             }
         }
 
-        // --- 2. Збірка фінального перекладу (з підтримкою фрагментів) ---
+        // --- 2. Поетапна збірка перекладу ---
         async function processTranslation() {
             clearLog();
             finalJsonString = "";
@@ -1109,9 +1200,7 @@
                         }
                         parsedDirectly = true;
                     }
-                } catch (e) {
-                    // Якщо є зайві коментарі ШІ, розпарсимо за допомогою regex
-                }
+                } catch (e) {}
 
                 // Спроба 2: Regex парсинг пар "key": "value"
                 if (!parsedDirectly && translatedText.trim()) {
@@ -1130,7 +1219,6 @@
 
                 const botKeysCount = Object.keys(newBotObj).length;
                 if (botKeysCount > 0) {
-                    // Об'єднуємо новий фрагмент із раніше збереженими
                     Object.assign(accumulatedTranslations, newBotObj);
                     log(`🧩 Оброблено фрагмент: успішно додано ${botKeysCount} перекладів у загальну базу.`, "log-info");
                     showToast(`+${botKeysCount} ключів успішно додано!`, "success");
@@ -1138,7 +1226,7 @@
                     log(`⚠️ Не вдалося розпізнати пари "ключ": "значення" у вставленому тексті. Перевірте лапки.`, "log-warning");
                 }
 
-                // Формуємо фінальний об'єкт у порядку англійського оригіналу та знаходимо залишок
+                // Формуємо фінальний об'єкт у порядку оригіналу та визначаємо залишок
                 const finalObj = {};
                 const remainingToTranslate = {};
                 let stillMissingCount = 0;
@@ -1153,7 +1241,7 @@
                         finalObj[key] = oldTranslationObj[key];
                         fromOldCount++;
                     } else {
-                        finalObj[key] = originalObj[key]; // Тимчасово підставляємо оригінал
+                        finalObj[key] = originalObj[key];
                         remainingToTranslate[key] = originalObj[key];
                         stillMissingCount++;
                     }
@@ -1173,13 +1261,10 @@
                 const percentage = totalKeys > 0 ? Math.round((translatedTotal / totalKeys) * 100) : 0;
                 document.getElementById('progressBar').style.width = `${percentage}%`;
 
-                // Якщо ще залишились неперекладені рядки:
+                // Якщо ще залишились неперекладені рядки
                 if (stillMissingCount > 0) {
                     const remainingPrompt = `Переклади ці рядки українською мовою для Minecraft мода. Збережи назви ключів, %s, %d, {0} та § коди. Надай тільки JSON:\n\n` + JSON.stringify(remainingToTranslate, null, 2);
-                    
                     log(`⚠️ Вам треба ще перекласти це (залишилось неперекладених ключів: ${stillMissingCount} із ${totalKeys}). Скопіюйте їх нижче для ШІ:`, "log-warning", remainingPrompt);
-                    
-                    // Очищаємо поле для зручності або даємо підказку
                     document.getElementById('translatedText').value = '';
                     showToast(`Залишилось перекласти: ${stillMissingCount} рядків. Скопіюйте їх для бота!`, "warning");
                 } else {
@@ -1187,14 +1272,14 @@
                     showToast("Переклад завершено на 100%!", "success");
                 }
 
-                // Збереження в поточний проєкт
+                // Збереження в проєкт
                 if (currentProjectName !== "_fast_") {
                     projects[currentProjectName].translation = accumulatedTranslations;
                     saveProjectsToStorage();
                     updateProjectSelect();
                     document.getElementById('projectSelect').value = currentProjectName;
                     loadProjectInfo();
-                    log(`💾 Стан проєкту "${currentProjectName}" оновлено в пам'яті.`, "log-success");
+                    log(`💾 Стан проєкту "${currentProjectName}" збережено в пам'ять.`, "log-success");
                 }
 
                 finalJsonString = JSON.stringify(finalObj, null, 2);
@@ -1206,115 +1291,7 @@
             }
         }
 
-        // --- 2. Збірка фінального перекладу ---
-        async function processTranslation() {
-            clearLog();
-            finalJsonString = "";
-            const translatedText = document.getElementById('translatedText').value;
-
-            try {
-                const { originalObj, oldTranslationObj } = await getFilesData();
-                const newBotObj = {};
-
-                // Спроба 1: Розпарсити напряму як чистий JSON
-                let parsedDirectly = false;
-                try {
-                    const trimmed = translatedText.trim();
-                    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
-                        const parsed = JSON.parse(trimmed);
-                        for (let k in parsed) {
-                            newBotObj[k] = parsed[k];
-                        }
-                        parsedDirectly = true;
-                    }
-                } catch (e) {
-                    // Якщо в тексті є зайві коментарі ШІ, продовжуємо регулярним виразом
-                }
-
-                // Спроба 2: Regex парсинг пар "key": "value"
-                let regexCount = 0;
-                if (!parsedDirectly && translatedText.trim()) {
-                    const regex = /"([^"]+)"\s*:\s*"((?:[^"\\]|\\.)*)"/g;
-                    let match;
-                    while ((match = regex.exec(translatedText)) !== null) {
-                        const key = match[1];
-                        const rawVal = match[2];
-                        try {
-                            newBotObj[key] = JSON.parse(`"${rawVal}"`);
-                        } catch (err) {
-                            newBotObj[key] = rawVal.replace(/\\"/g, '"');
-                        }
-                        regexCount++;
-                    }
-                }
-
-                const botKeysCount = Object.keys(newBotObj).length;
-                if (botKeysCount > 0) {
-                    log(`🤖 З текстового поля ШІ зчитано ${botKeysCount} перекладених ключів.`, "log-info");
-                } else if (translatedText.trim() !== "") {
-                    log(`⚠️ Не вдалося розпізнати пари "ключ": "значення" в полі ШІ. Перевірте формат лапок.`, "log-warning");
-                }
-
-                // Збірка в строгому порядку англійського оригіналу
-                const finalObj = {};
-                let stillMissingCount = 0;
-                let fromBotCount = 0;
-                let fromOldCount = 0;
-
-                for (let key in originalObj) {
-                    if (Object.prototype.hasOwnProperty.call(newBotObj, key)) {
-                        finalObj[key] = newBotObj[key];
-                        fromBotCount++;
-                    } else if (Object.prototype.hasOwnProperty.call(oldTranslationObj, key)) {
-                        finalObj[key] = oldTranslationObj[key];
-                        fromOldCount++;
-                    } else {
-                        finalObj[key] = originalObj[key]; // Запасний варіант: англійський текст
-                        stillMissingCount++;
-                    }
-                }
-
-                const totalKeys = Object.keys(originalObj).length;
-                const translatedTotal = totalKeys - stillMissingCount;
-
-                // Оновлення блоку статистики
-                document.getElementById('statsGrid').style.display = 'grid';
-                document.getElementById('progressWrap').style.display = 'block';
-                document.getElementById('statTotal').textContent = totalKeys;
-                document.getElementById('statTranslated').textContent = translatedTotal;
-                document.getElementById('statMissing').textContent = stillMissingCount;
-                document.getElementById('statOutdated').textContent = "0";
-
-                const percentage = totalKeys > 0 ? Math.round((translatedTotal / totalKeys) * 100) : 0;
-                document.getElementById('progressBar').style.width = `${percentage}%`;
-
-                if (stillMissingCount > 0) {
-                    log(`⚠️ Зібрано ${totalKeys} ключів (Використано старих: ${fromOldCount}, нових від ШІ: ${fromBotCount}). Залишилось без перекладу: ${stillMissingCount} (вставлено en_us).`, "log-warning");
-                } else {
-                    log(`🎉 Локалізацію зібрано на 100%! Всі ${totalKeys} ключів успішно перекладено.`, "log-success");
-                }
-
-                // Збереження в проєкт
-                if (currentProjectName !== "_fast_") {
-                    projects[currentProjectName].translation = finalObj;
-                    saveProjectsToStorage();
-                    updateProjectSelect();
-                    document.getElementById('projectSelect').value = currentProjectName;
-                    loadProjectInfo();
-                    log(`💾 Зміни збережено в пам'ять проєкту "${currentProjectName}".`, "log-success");
-                }
-
-                finalJsonString = JSON.stringify(finalObj, null, 2);
-                document.getElementById('downloadCopyGroup').style.display = 'flex';
-                showToast("JSON успішно зібрано!", "success");
-
-            } catch (error) {
-                log(`Помилка: ${error.message}`, "log-error");
-                showToast(error.message, "error");
-            }
-        }
-
-        // --- Завантаження і копіювання ---
+        // --- Експорт та буфер обміну ---
         function triggerDownload(content, filename) {
             const blob = new Blob([content], { type: "application/json;charset=utf-8" });
             const url = URL.createObjectURL(blob);
@@ -1360,7 +1337,6 @@
             setTimeout(() => { copyBtn.innerHTML = originalHtml; }, 2200);
         }
 
-        // --- Тестовий приклад для швидкої перевірки ---
         function insertMockData() {
             document.getElementById('translatedText').value = `{\n  "block.hexcasting.slate": "Сланцева скрижаль",\n  "item.hexcasting.wand": "Чарівний жезл кастування",\n  "spell.hexcasting.teleport": "Телепортація крізь простір"\n}`;
             showToast("Приклад вставлено в поле перекладу", "info");
