@@ -3,68 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft JSON Builder</title>
+    <title>Minecraft JSON Builder PRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --bg-input: #0f172a;
+            --bg-body: #090d16;
+            --bg-card: #111827;
+            --bg-card-hover: #162033;
+            --bg-input: #0b1120;
+            --border: #1f293d;
+            --border-hover: #334155;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --primary: #6366f1;
             --primary-hover: #4f46e5;
+            --primary-glow: rgba(99, 102, 241, 0.25);
             --success: #10b981;
             --success-hover: #059669;
+            --success-glow: rgba(16, 185, 129, 0.2);
             --danger: #ef4444;
-            --danger-hover: #dc2828;
+            --danger-hover: #dc2626;
             --warning: #f59e0b;
             --warning-hover: #d97706;
-            --border: #334155;
-            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
         }
 
-        body { 
-            font-family: 'Inter', 'Segoe UI', sans-serif; 
-            background-color: var(--bg-main); 
-            color: var(--text-main); 
-            padding: 20px; 
-            max-width: 900px; 
-            margin: 0 auto; 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at 50% 0%, #172554 0%, var(--bg-body) 60%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 30px 16px 60px;
             line-height: 1.5;
         }
 
-        h1 { 
-            text-align: center; 
-            font-size: 28px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px;
-            margin-bottom: 30px;
+        .container {
+            max-width: 940px;
+            margin: 0 auto;
         }
 
-        .step { 
-            background-color: var(--bg-card); 
-            padding: 20px; 
-            border-radius: var(--radius); 
-            margin-bottom: 20px; 
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        header {
+            text-align: center;
+            margin-bottom: 32px;
         }
 
-        .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .step-header h3 { margin: 0; color: var(--primary); font-size: 18px; }
-        .step p { color: var(--text-muted); font-size: 14px; margin-top: 0; margin-bottom: 15px; }
-
-        .project-bar {
-            display: flex;
-            gap: 10px;
+        .logo-wrap {
+            display: inline-flex;
             align-items: center;
-            background: var(--bg-card);
-            padding: 15px;
-            border-radius: var(--radius);
-            margin-bottom: 20px;
-            border: 1px solid var(--primary);
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            border-radius: 14px;
+            box-shadow: 0 8px 24px var(--primary-glow);
+            margin-bottom: 12px;
+        }
+
+        .logo-wrap svg {
+            width: 28px;
+            height: 28px;
+            fill: #ffffff;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Toast notifications */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            min-width: 280px;
+            max-width: 380px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            background: #1e293b;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            pointer-events: auto;
+            border: 1px solid var(--border);
+        }
+
+        .toast-success { border-color: var(--success); background: #064e3b; }
+        .toast-error { border-color: var(--danger); background: #7f1d1d; }
+        .toast-warning { border-color: var(--warning); background: #78350f; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Top Bar: Projects */
+        .project-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+
+        .project-card-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            width: 100%;
+            margin-bottom: 2px;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 8px;
+            width: 100%;
             flex-wrap: wrap;
         }
 
@@ -72,149 +165,600 @@
             background-color: var(--bg-input);
             color: var(--text-main);
             border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: 6px;
-            flex: 1;
-            font-size: 15px;
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
             outline: none;
-            min-width: 200px;
+            transition: all 0.2s;
+            flex: 1;
+            min-width: 180px;
         }
-        
-        select:focus, input[type="text"]:focus { border-color: var(--primary); }
 
-        .file-upload-wrapper { position: relative; display: flex; align-items: center; gap: 15px; }
-        .file-upload-wrapper input[type="file"] { position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-        .file-btn { background-color: var(--border); padding: 10px 15px; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-weight: 500; transition: 0.2s; pointer-events: none; }
-        .file-upload-wrapper:hover .file-btn { background-color: #475569; }
-        .file-name { color: var(--success); font-weight: bold; font-size: 14px; }
+        select:focus, input[type="text"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
 
-        textarea { width: 100%; height: 180px; background-color: var(--bg-input); color: var(--text-main); border: 1px solid var(--border); border-radius: 8px; padding: 15px; font-family: 'Courier New', Courier, monospace; resize: vertical; box-sizing: border-box; outline: none; }
-        textarea:focus { border-color: var(--primary); }
+        /* Steps Layout */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
 
-        .button-group { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
-        button { display: flex; align-items: center; justify-content: center; gap: 8px; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; flex: 1; transition: all 0.2s; min-width: 200px; }
-        
-        .btn-primary { background-color: var(--primary); }
-        .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
-        .btn-warning { background-color: var(--warning); color: #fff; }
-        .btn-warning:hover { background-color: var(--warning-hover); transform: translateY(-2px); }
-        .btn-danger { background-color: var(--danger); flex: 0.2; min-width: 60px; }
-        .btn-danger:hover { background-color: var(--danger-hover); }
-        .btn-success { background-color: var(--success); }
-        .btn-success:hover { background-color: var(--success-hover); }
-        
-        .btn-icon-only { flex: none; padding: 10px 15px; background-color: var(--success); min-width: auto; }
-        .btn-icon-only:hover { background-color: var(--success-hover); transform: translateY(-2px); }
+        @media (max-width: 768px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
-        .log { margin-top: 20px; padding: 20px; background: #020617; border-radius: var(--radius); border: 1px solid var(--border); display: none; }
-        .log h3 { margin-top: 0; color: white; display: flex; align-items: center; gap: 8px; }
-        .log ul { padding-left: 0; list-style: none; margin: 0; }
-        .log li { padding: 12px; margin-bottom: 10px; border-radius: 6px; font-size: 14px; }
-        
-        .log-success { background-color: rgba(16, 185, 129, 0.1); color: var(--success); border-left: 4px solid var(--success); }
-        .log-warning { background-color: rgba(245, 158, 11, 0.1); color: var(--warning); border-left: 4px solid var(--warning); }
-        .log-error { background-color: rgba(239, 68, 68, 0.1); color: var(--danger); border-left: 4px solid var(--danger); }
-        .log-info { background-color: rgba(99, 102, 241, 0.1); color: #818cf8; border-left: 4px solid var(--primary); }
-        .log-removed { background-color: rgba(220, 38, 38, 0.15); color: #fca5a5; border-left: 4px solid var(--danger); }
-        
-        .small-text { 
-            font-size: 13px; 
-            opacity: 0.9; 
-            margin-top: 8px; 
-            display: block; 
-            font-family: 'Courier New', Courier, monospace; 
-            white-space: pre-wrap;
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: border-color 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .card-title svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+        .file-dropzone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px 16px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.4);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .file-dropzone:hover, .file-dropzone.dragover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .file-dropzone input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-dropzone-icon {
+            margin-bottom: 8px;
+        }
+
+        .file-dropzone-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--text-muted);
+            transition: fill 0.2s;
+        }
+
+        .file-dropzone:hover .file-dropzone-icon svg {
+            fill: var(--primary);
+        }
+
+        .file-dropzone-text {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .file-dropzone-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--success);
             word-break: break-all;
-            max-height: 200px;
-            overflow-y: auto;
-            background: rgba(0,0,0,0.4);
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.1);
+            margin-top: 6px;
+            display: none;
         }
-        .badge { background-color: var(--warning); color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        svg { width: 20px; height: 20px; fill: currentColor; }
+        /* Step 3: Textarea */
+        .step-full {
+            margin-bottom: 24px;
+        }
+
+        .textarea-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .textarea-controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-text {
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: color 0.15s;
+        }
+
+        .btn-text:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .fragment-badge {
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 170px;
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        /* Buttons */
+        .button-bar {
+            display: grid;
+            grid-template-columns: 1.2fr 1.2fr auto;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 640px) {
+            .button-bar {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            color: white;
+            outline: none;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+        }
+
+        .btn-warning:hover {
+            background-color: var(--warning-hover);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            box-shadow: 0 4px 14px var(--success-glow);
+        }
+
+        .btn-success:hover {
+            background-color: var(--success-hover);
+        }
+
+        .btn-danger {
+            background-color: #334155;
+            color: #f87171;
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #1e293b;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background-color: #334155;
+            border-color: #475569;
+        }
+
+        .btn-icon {
+            padding: 10px;
+            min-width: 44px;
+        }
+
+        /* Stats & Logs */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            background: #0b1120;
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .progress-bar-wrap {
+            width: 100%;
+            height: 6px;
+            background: #1e293b;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--warning), var(--success));
+            transition: width 0.4s ease;
+        }
+
+        .log-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .log-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .log-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .log-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .log-item {
+            padding: 14px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            border-left: 4px solid;
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .log-item-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+
+        .log-success { border-color: var(--success); color: #34d399; }
+        .log-warning { border-color: var(--warning); color: #fbbf24; }
+        .log-error { border-color: var(--danger); color: #f87171; }
+        .log-info { border-color: var(--primary); color: #818cf8; }
+        .log-removed { border-color: #e11d48; color: #fb7185; }
+
+        .code-box {
+            margin-top: 10px;
+            background: #020617;
+            border: 1px solid #1e293b;
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: #cbd5e1;
+            white-space: pre;
+            overflow-x: auto;
+            max-height: 220px;
+            line-height: 1.5;
+        }
+
+        .copy-snippet-btn {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .copy-snippet-btn:hover {
+            color: #fff;
+            background: #334155;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
 
-    <h1>
-        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7.5l-10-5v10l10 5 10-5v-10l-10 5z"/></svg>
-        Збирач Перекладів PRO
-    </h1>
+    <div id="toastContainer"></div>
 
-    <div class="project-bar">
-        <svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 14H4V8h16v12z"/></svg>
-        <select id="projectSelect" onchange="loadProjectInfo()">
-            <option value="_fast_">⚡ Швидкий режим (без збереження)</option>
-        </select>
-        
-        <button id="downloadProjectBtn" class="btn-icon-only" style="display: none;" onclick="downloadSavedProject()" title="Завантажити готовий переклад з пам'яті">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-        </button>
+    <div class="container">
+        <header>
+            <div class="logo-wrap">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7.5l-10-5v10l10 5 10-5v-10l-10 5z"/></svg>
+            </div>
+            <h1>Minecraft JSON Builder PRO</h1>
+            <p class="subtitle">Швидка актуалізація, пошук нових ключів та складання якісних локалізацій для модів</p>
+        </header>
 
-        <input type="text" id="newProjectName" placeholder="Назва нового проекту...">
-        <button class="btn-primary" style="flex: 0.5;" onclick="createProject()">Створити</button>
-    </div>
+        <!-- Project Bar -->
+        <div class="project-card">
+            <div class="project-card-title">
+                <svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                <span>Проєкт перекладу</span>
+            </div>
+            <div class="project-actions">
+                <select id="projectSelect" onchange="loadProjectInfo()">
+                    <option value="_fast_">⚡ Швидкий сеанс (без збереження в пам'ять)</option>
+                </select>
 
-    <div class="step">
-        <div class="step-header">
-            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-            <h3>Крок 1: Англійський оригінал (en_us.json)</h3>
+                <button id="downloadProjectBtn" class="btn-secondary btn-icon" style="display: none;" onclick="downloadSavedProject()" title="Завантажити поточний готовий JSON">
+                    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                </button>
+
+                <button id="deleteProjectBtn" class="btn-danger btn-icon" style="display: none;" onclick="deleteCurrentProject()" title="Видалити цей проєкт">
+                    <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                </button>
+
+                <input type="text" id="newProjectName" placeholder="Назва нового мода / проєкту...">
+                <button class="btn-primary" onclick="createProject()">+ Створити</button>
+            </div>
         </div>
-        <div class="file-upload-wrapper">
-            <input type="file" id="originalFile" accept=".json" onchange="updateFileName('originalFile', 'originalName')">
-            <div class="file-btn">Вибрати файл</div>
-            <span id="originalName" class="file-name">Файл не вибрано</span>
-        </div>
-    </div>
 
-    <div class="step">
-        <div class="step-header">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-            <h3>Крок 2: Старий переклад <span class="badge" id="projectStatusBadge">Одноразовий</span></h3>
-        </div>
-        <div class="file-upload-wrapper">
-            <input type="file" id="oldTranslationFile" accept=".json" onchange="updateFileName('oldTranslationFile', 'oldName')">
-            <div class="file-btn">Завантажити вручну</div>
-            <span id="oldName" class="file-name">Немає файлу</span>
-        </div>
-    </div>
+        <!-- File Uploads Grid -->
+        <div class="steps-grid">
+            <!-- Step 1 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                        <span>1. Оригінал (en_us.json)</span>
+                    </div>
+                    <span class="badge badge-warning">Обов'язково</span>
+                </div>
+                <div class="file-dropzone" id="dropzoneOrig">
+                    <input type="file" id="originalFile" accept=".json" onchange="handleFileSelected('originalFile', 'dropzoneOrigText', 'dropzoneOrigName')">
+                    <div class="file-dropzone-icon">
+                        <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                    </div>
+                    <div class="file-dropzone-text" id="dropzoneOrigText">Натисніть або перетягніть сюди en_us.json</div>
+                    <div class="file-dropzone-name" id="dropzoneOrigName"></div>
+                </div>
+            </div>
 
-    <div class="step">
-        <div class="step-header">
-            <svg viewBox="0 0 24 24"><path d="M21 11.5v-1c0-3.8-3.1-7-7-7h-1V2c0-.6-.4-1-1-1s-1 .4-1 1v1.5h-1c-3.8 0-7 3.2-7 7v1H2v2h2v1c0 3.8 3.1 7 7 7h1v1.5c0 .6.4 1 1 1s1-.4 1-1V22h1c3.8 0 7-3.2 7-7v-1h2v-2h-2zm-10 7.5c-2.8 0-5-2.2-5-5v-1h10v1c0 2.8-2.2 5-5 5zm5-8H6v-1c0-2.8 2.2-5 5-5h2c2.8 0 5 2.2 5 5v1z"/></svg>
-            <h3>Крок 3: Нові рядки від бота</h3>
+            <!-- Step 2 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+                        <span>2. Старий переклад</span>
+                    </div>
+                    <span class="badge badge-warning" id="projectStatusBadge">Одноразовий</span>
+                </div>
+                <div class="file-dropzone" id="dropzoneOld">
+                    <input type="file" id="oldTranslationFile" accept=".json" onchange="handleFileSelected('oldTranslationFile', 'dropzoneOldText', 'dropzoneOldName')">
+                    <div class="file-dropzone-icon">
+                        <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                    </div>
+                    <div class="file-dropzone-text" id="dropzoneOldText">Перетягніть старий uk_ua.json (опціонально)</div>
+                    <div class="file-dropzone-name" id="dropzoneOldName"></div>
+                </div>
+            </div>
         </div>
-        <p>Сюди вставляй готові переклади, які зробив ШІ.</p>
-        <textarea id="translatedText" placeholder='"block.hexcasting.slate": "Скрижаль", ...'></textarea>
-    </div>
 
-    <div class="button-group">
-        <button class="btn-warning" onclick="analyzeJSONs()">
-            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-            1. Аналізувати файли
-        </button>
-        <button class="btn-primary" onclick="processTranslation()">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            2. Зібрати JSON
-        </button>
-        <button class="btn-danger" onclick="resetForm()" title="Очистити все">
-            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
-    </div>
+        <!-- Step 3 -->
+        <div class="card step-full">
+            <div class="textarea-header">
+                <div class="card-title">
+                    <svg viewBox="0 0 24 24"><path d="M21 11.5v-1c0-3.8-3.1-7-7-7h-1V2c0-.6-.4-1-1-1s-1 .4-1 1v1.5h-1c-3.8 0-7 3.2-7 7v1H2v2h2v1c0 3.8 3.1 7 7 7h1v1.5c0 .6.4 1 1 1s1-.4 1-1V22h1c3.8 0 7-3.2 7-7v-1h2v-2h-2zm-10 7.5c-2.8 0-5-2.2-5-5v-1h10v1c0 2.8-2.2 5-5 5zm5-8H6v-1c0-2.8 2.2-5 5-5h2c2.8 0 5 2.2 5 5v1z"/></svg>
+                    <span>3. Нові переклади від ШІ (можна вставляти частинами)</span>
+                    <span class="fragment-badge">Поетапний режим</span>
+                </div>
+                <div class="textarea-controls">
+                    <button class="btn-text" onclick="insertMockData()" title="Вставити тестовий приклад">Тестовий приклад</button>
+                    <button class="btn-text" onclick="clearInputArea()" title="Очистити поле для наступного фрагменту">Очистити поле</button>
+                </div>
+            </div>
+            <textarea id="translatedText" placeholder='Вставляйте сюди відповіді ШІ цілком або фрагментами (наприклад, по 50-100 рядків).&#10;При кожному натисканні "Зібрати" система збереже фрагмент і покаже, що ще залишилось перекласти!'></textarea>
+        </div>
 
-    <div id="logArea" class="log">
-        <h3>
-            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-            Звіт про роботу
-        </h3>
-        <ul id="logMessages"></ul>
-        
-        <div class="button-group" id="downloadCopyGroup" style="display:none; margin-top: 15px;">
-            <button class="btn-success" onclick="downloadJSON()">Завантажити uk_ua.json</button>
-            <button id="copyBtn" class="btn-success" style="background-color: var(--primary);" onclick="copyToClipboard()">Копіювати код</button>
+        <!-- Action Controls -->
+        <div class="button-bar">
+            <button class="btn-warning" onclick="analyzeJSONs()">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                1. Аналізувати файли
+            </button>
+            <button class="btn-primary" onclick="processTranslation()">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                2. Застосувати фрагмент і зібрати
+            </button>
+            <button class="btn-danger btn-icon" onclick="resetForm()" title="Повністю скинути форми">
+                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+        </div>
+
+        <!-- Logs & Stats Section -->
+        <div id="logArea" class="log-section">
+            <div class="log-header">
+                <div class="log-title">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                    <span>Статистика та Звіт</span>
+                </div>
+            </div>
+
+            <!-- Stats Boxes -->
+            <div class="stats-grid" id="statsGrid" style="display:none;">
+                <div class="stat-box">
+                    <div class="stat-value" id="statTotal">0</div>
+                    <div class="stat-label">Всього в оригіналі</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="statTranslated" style="color: var(--success);">0</div>
+                    <div class="stat-label">Перекладено</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="statMissing" style="color: var(--warning);">0</div>
+                    <div class="stat-label">Потребують ШІ</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="statOutdated" style="color: var(--danger);">0</div>
+                    <div class="stat-label">Видалені ключі</div>
+                </div>
+            </div>
+            <div class="progress-bar-wrap" id="progressWrap" style="display:none;">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <ul id="logMessages" class="log-list" style="margin-top: 16px;"></ul>
+
+            <div class="action-row" id="downloadCopyGroup" style="display:none;">
+                <button class="btn-success" onclick="downloadJSON()">
+                    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    Завантажити uk_ua.json
+                </button>
+                <button id="copyBtn" class="btn-primary" onclick="copyFinalJSON()">
+                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                    Копіювати код
+                </button>
+            </div>
         </div>
     </div>
 
@@ -222,17 +766,87 @@
         let projects = {};
         let currentProjectName = "_fast_";
         let finalJsonString = "";
+        let accumulatedTranslations = {}; // Накопичувальний словник для збірки частинами
 
         window.onload = function() {
+            setupDragAndDrop();
             loadProjectsFromStorage();
             updateProjectSelect();
             loadProjectInfo();
         };
 
+        // --- Custom Toast UI (Заміна alert) ---
+        function showToast(message, type = "info") {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            let iconSvg = '';
+            if (type === 'success') {
+                iconSvg = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+            } else if (type === 'error') {
+                iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>';
+            } else {
+                iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>';
+            }
+
+            toast.innerHTML = `${iconSvg} <span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // --- Drag and Drop Setup ---
+        function setupDragAndDrop() {
+            ['dropzoneOrig', 'dropzoneOld'].forEach(id => {
+                const zone = document.getElementById(id);
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    zone.addEventListener(eventName, e => {
+                        e.preventDefault();
+                        zone.classList.add('dragover');
+                    }, false);
+                });
+                ['dragleave', 'drop'].forEach(eventName => {
+                    zone.addEventListener(eventName, e => {
+                        e.preventDefault();
+                        zone.classList.remove('dragover');
+                    }, false);
+                });
+            });
+        }
+
+        function handleFileSelected(inputId, textId, nameId) {
+            const input = document.getElementById(inputId);
+            const textElem = document.getElementById(textId);
+            const nameElem = document.getElementById(nameId);
+
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                if (!file.name.endsWith('.json')) {
+                    showToast("Оберіть файл з розширенням .json", "error");
+                    input.value = "";
+                    return;
+                }
+                textElem.style.display = 'none';
+                nameElem.style.display = 'block';
+                nameElem.textContent = `✔ ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+                showToast(`Файл "${file.name}" завантажено`, "success");
+            } else {
+                textElem.style.display = 'block';
+                nameElem.style.display = 'none';
+            }
+        }
+
+        // --- LocalStorage & Projects ---
         function loadProjectsFromStorage() {
             const saved = localStorage.getItem('minecraftTranslationsDB');
             if (saved) {
-                try { projects = JSON.parse(saved); } 
+                try { projects = JSON.parse(saved); }
                 catch (e) { projects = {}; }
             }
         }
@@ -245,12 +859,13 @@
             const select = document.getElementById('projectSelect');
             const currentValue = select.value || "_fast_";
             
-            select.innerHTML = '<option value="_fast_">⚡ Швидкий режим (без збереження)</option>';
+            select.innerHTML = '<option value="_fast_">⚡ Швидкий сеанс (без збереження в пам\'ять)</option>';
             
             for (let name in projects) {
                 let opt = document.createElement('option');
                 opt.value = name;
-                opt.textContent = `📁 ${name} (${Object.keys(projects[name].translation).length} ключів)`;
+                const count = Object.keys(projects[name].translation || {}).length;
+                opt.textContent = `📁 ${name} (${count} ключів)`;
                 select.appendChild(opt);
             }
             select.value = (currentValue === "_fast_" || projects[currentValue]) ? currentValue : "_fast_";
@@ -259,97 +874,132 @@
         function createProject() {
             const nameInput = document.getElementById('newProjectName');
             const name = nameInput.value.trim();
-            if (!name) return alert("Введіть назву проекту!");
-            if (name === "_fast_") return alert("Неприпустима назва!");
-            if (projects[name]) return alert("Проект з такою назвою вже існує!");
+            if (!name) return showToast("Введіть назву проєкту!", "warning");
+            if (name === "_fast_") return showToast("Ця назва зарезервована системою!", "warning");
+            if (projects[name]) return showToast("Проєкт з такою назвою вже існує!", "warning");
 
             projects[name] = { translation: {} };
             saveProjectsToStorage();
             updateProjectSelect();
-            
+
             document.getElementById('projectSelect').value = name;
             nameInput.value = "";
             loadProjectInfo();
+            showToast(`Проєкт "${name}" успішно створено!`, "success");
+        }
+
+        function deleteCurrentProject() {
+            if (currentProjectName === "_fast_" || !projects[currentProjectName]) return;
+            if (confirm(`Ви точно хочете видалити проєкт "${currentProjectName}" разом із усіма збереженими ключами?`)) {
+                delete projects[currentProjectName];
+                saveProjectsToStorage();
+                currentProjectName = "_fast_";
+                updateProjectSelect();
+                loadProjectInfo();
+                showToast("Проєкт успішно видалено!", "info");
+            }
         }
 
         function loadProjectInfo() {
             currentProjectName = document.getElementById('projectSelect').value;
             const badge = document.getElementById('projectStatusBadge');
             const downloadProjBtn = document.getElementById('downloadProjectBtn');
-            
+            const deleteProjBtn = document.getElementById('deleteProjectBtn');
+
             if (currentProjectName === "_fast_") {
                 badge.textContent = 'Одноразовий';
-                badge.style.backgroundColor = 'var(--warning)';
+                badge.className = 'badge badge-warning';
                 downloadProjBtn.style.display = 'none';
+                deleteProjBtn.style.display = 'none';
+                accumulatedTranslations = {};
             } else if (currentProjectName && projects[currentProjectName]) {
-                const keysCount = Object.keys(projects[currentProjectName].translation).length;
-                badge.textContent = `В пам'яті: ${keysCount} рядків`;
-                badge.style.backgroundColor = 'var(--success)';
-                downloadProjBtn.style.display = keysCount > 0 ? 'block' : 'none';
+                accumulatedTranslations = { ...(projects[currentProjectName].translation || {}) };
+                const keysCount = Object.keys(accumulatedTranslations).length;
+                badge.textContent = `В базі: ${keysCount} ключів`;
+                badge.className = 'badge badge-success';
+                downloadProjBtn.style.display = keysCount > 0 ? 'inline-flex' : 'none';
+                deleteProjBtn.style.display = 'inline-flex';
             }
         }
 
         function downloadSavedProject() {
             if (currentProjectName === "_fast_" || !projects[currentProjectName]) return;
             const data = projects[currentProjectName].translation;
-            if (Object.keys(data).length === 0) return alert("Цей проект поки що порожній!");
-            
+            if (Object.keys(data).length === 0) return showToast("Цей проєкт ще порожній!", "warning");
+
             const jsonString = JSON.stringify(data, null, 2);
             triggerDownload(jsonString, `${currentProjectName}_uk_ua.json`);
         }
 
-        function updateFileName(inputId, spanId) {
-            const input = document.getElementById(inputId);
-            const span = document.getElementById(spanId);
-            if (input.files.length > 0) {
-                span.textContent = "✅ " + input.files[0].name;
-                span.style.color = "var(--success)";
-            } else {
-                span.textContent = spanId === 'oldName' ? "Немає файлу" : "Файл не вибрано";
-                span.style.color = "var(--text-muted)";
-            }
-        }
-
-        function log(message, type = "log-success", subtext = "") {
-            const logMessages = document.getElementById('logMessages');
-            const li = document.createElement('li');
-            li.className = type;
-            li.textContent = message;
-            
-            if (subtext) {
-                const span = document.createElement('span');
-                span.className = "small-text";
-                span.textContent = subtext;
-                li.appendChild(span);
-            }
-            logMessages.appendChild(li);
-        }
-
+        // --- Log and Display Utilities ---
         function clearLog() {
-            document.getElementById('logArea').style.display = 'block';
+            const logArea = document.getElementById('logArea');
+            logArea.style.display = 'block';
             document.getElementById('logMessages').innerHTML = '';
             document.getElementById('downloadCopyGroup').style.display = 'none';
+            document.getElementById('statsGrid').style.display = 'none';
+            document.getElementById('progressWrap').style.display = 'none';
+            logArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function log(message, type = "log-success", codeSnippet = "") {
+            const logMessages = document.getElementById('logMessages');
+            const li = document.createElement('li');
+            li.className = `log-item ${type}`;
+
+            const titleDiv = document.createElement('div');
+            titleDiv.className = "log-item-title";
+            titleDiv.innerHTML = `<span>${message}</span>`;
+            li.appendChild(titleDiv);
+
+            if (codeSnippet) {
+                const pre = document.createElement('div');
+                pre.className = "code-box";
+                pre.textContent = codeSnippet;
+                li.appendChild(pre);
+
+                const copyBtn = document.createElement('button');
+                copyBtn.className = "copy-snippet-btn";
+                copyBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Скопіювати для відправки боту`;
+                copyBtn.onclick = () => {
+                    executeCopy(codeSnippet);
+                    copyBtn.textContent = '✔ Скопійовано!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Скопіювати для відправки боту`;
+                    }, 2000);
+                };
+        function clearInputArea() {
+            document.getElementById('translatedText').value = '';
+            showToast("Поле вводу очищено для наступного фрагменту", "info");
         }
 
         function resetForm() {
             document.getElementById('originalFile').value = '';
             document.getElementById('oldTranslationFile').value = '';
             document.getElementById('translatedText').value = '';
-            updateFileName('originalFile', 'originalName');
-            updateFileName('oldTranslationFile', 'oldName');
+
+            handleFileSelected('originalFile', 'dropzoneOrigText', 'dropzoneOrigName');
+            handleFileSelected('oldTranslationFile', 'dropzoneOldText', 'dropzoneOldName');
+
+            accumulatedTranslations = {};
             document.getElementById('logArea').style.display = 'none';
             finalJsonString = "";
+            showToast("Форму та накопичені фрагменти очищено!", "info");
         }
 
         function readFileAsJSON(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = e => {
-                    try { resolve(JSON.parse(e.target.result)); } 
-                    catch (err) { reject(new Error("Файл не є валідним JSON")); }
+                    try {
+                        const parsed = JSON.parse(e.target.result);
+                        resolve(parsed);
+                    } catch (err) {
+                        reject(new Error(`Файл "${file.name}" має синтаксичну помилку в JSON`));
+                    }
                 };
-                reader.onerror = () => reject(new Error("Помилка читання файлу"));
-                reader.readAsText(file);
+                reader.onerror = () => reject(new Error(`Помилка зчитування файлу "${file.name}"`));
+                reader.readAsText(file, "UTF-8");
             });
         }
 
@@ -358,23 +1008,28 @@
             const oldTranslationFileInput = document.getElementById('oldTranslationFile');
 
             if (originalFileInput.files.length === 0) {
-                throw new Error("Не завантажено оригінальний файл (en_us.json)!");
+                throw new Error("Будь ласка, завантажте файл оригіналу (en_us.json) у Крок 1");
             }
 
             const originalObj = await readFileAsJSON(originalFileInput.files[0]);
             let oldTranslationObj = {};
-            
+
             if (currentProjectName !== "_fast_" && projects[currentProjectName]) {
-                oldTranslationObj = projects[currentProjectName].translation || {};
-            }
-            if (oldTranslationFileInput.files.length > 0) {
-                oldTranslationObj = await readFileAsJSON(oldTranslationFileInput.files[0]);
+                oldTranslationObj = { ...(projects[currentProjectName].translation || {}) };
             }
 
-            return { originalObj, oldTranslationObj };
+            if (oldTranslationFileInput.files.length > 0) {
+                const uploadedOld = await readFileAsJSON(oldTranslationFileInput.files[0]);
+                oldTranslationObj = { ...oldTranslationObj, ...uploadedOld };
+            }
+
+            // Синхронізуємо зі збереженими раніше частинами
+            accumulatedTranslations = { ...oldTranslationObj, ...accumulatedTranslations };
+
+            return { originalObj, oldTranslationObj: accumulatedTranslations };
         }
 
-        // --- НОВА ФУНКЦІЯ АНАЛІЗУ ---
+        // --- 1. Аналіз JSONs ---
         async function analyzeJSONs() {
             clearLog();
             try {
@@ -383,41 +1038,57 @@
                 let missingKeys = [];
                 let missingJsonForBot = {};
                 let outdatedKeys = [];
+                let translatedCount = 0;
 
-                // Аналіз неактуальних ключів
+                const origKeys = Object.keys(originalObj);
+                const totalKeys = origKeys.length;
+
                 for (let key in oldTranslationObj) {
-                    if (!originalObj.hasOwnProperty(key)) {
+                    if (!Object.prototype.hasOwnProperty.call(originalObj, key)) {
                         outdatedKeys.push(key);
                     }
                 }
 
-                // Аналіз нових ключів
-                for (let key in originalObj) {
-                    if (!oldTranslationObj.hasOwnProperty(key)) {
+                for (let key of origKeys) {
+                    if (Object.prototype.hasOwnProperty.call(oldTranslationObj, key)) {
+                        translatedCount++;
+                    } else {
                         missingKeys.push(key);
                         missingJsonForBot[key] = originalObj[key];
                     }
                 }
 
+                // Відображення плашок статистики
+                document.getElementById('statsGrid').style.display = 'grid';
+                document.getElementById('progressWrap').style.display = 'block';
+                document.getElementById('statTotal').textContent = totalKeys;
+                document.getElementById('statTranslated').textContent = translatedCount;
+                document.getElementById('statMissing').textContent = missingKeys.length;
+                document.getElementById('statOutdated').textContent = outdatedKeys.length;
+
+                const percentage = totalKeys > 0 ? Math.round((translatedCount / totalKeys) * 100) : 0;
+                document.getElementById('progressBar').style.width = `${percentage}%`;
+
                 if (outdatedKeys.length > 0) {
-                    log(`❌ Знайдено неактуальних ключів: ${outdatedKeys.length}. Вони будуть проігноровані при збірці.`, "log-removed", outdatedKeys.join('\n'));
+                    log(`⚠️ Застарілих ключів у старій локалізації: ${outdatedKeys.length}. Вони відсутні в оригіналі та будуть відсіяні.`, "log-removed", outdatedKeys.slice(0, 100).join('\n') + (outdatedKeys.length > 100 ? `\n...ще ${outdatedKeys.length - 100} ключів` : ''));
                 } else {
-                    log(`✅ Старі ключі повністю актуальні.`, "log-success");
+                    log(`✅ Непотрібних або застарілих ключів не виявлено.`, "log-success");
                 }
 
                 if (missingKeys.length > 0) {
-                    const jsonStringForBot = JSON.stringify(missingJsonForBot, null, 2);
-                    log(`🆕 Треба перекласти (нових ключів: ${missingKeys.length}). Скопіюй цей текст і відправ боту:`, "log-warning", jsonStringForBot);
+                    const promptSuggestion = `Переклади ці рядки українською мовою для Minecraft мода. Збережи точні назви ключів, змінні типу %s, %d, {0} та кольорові коди §. Поверни виключно валідний JSON:\n\n` + JSON.stringify(missingJsonForBot, null, 2);
+                    log(`⚡ Потрібно перекласти нових ключів: ${missingKeys.length} (${100 - percentage}% мода). Скопіюйте текст нижче та відправте штучному інтелекту:`, "log-warning", promptSuggestion);
                 } else {
-                    log(`🎉 Немає нових рядків для перекладу. Все готово!`, "log-success");
+                    log(`🎉 Чудово! Всі ${totalKeys} ключів вже мають переклад. Можна збирати фінальний файл!`, "log-success");
                 }
 
             } catch (error) {
                 log(`Помилка: ${error.message}`, "log-error");
+                showToast(error.message, "error");
             }
         }
 
-        // --- ФУНКЦІЯ ЗБІРКИ ---
+        // --- 2. Збірка фінального перекладу (з підтримкою фрагментів) ---
         async function processTranslation() {
             clearLog();
             finalJsonString = "";
@@ -425,66 +1096,225 @@
 
             try {
                 const { originalObj, oldTranslationObj } = await getFilesData();
-
-                // Парсинг тексту від бота
-                const regex = /"([^"]+)"\s*:\s*"([^"\\]*(?:\\.[^"\\]*)*)"/g;
                 const newBotObj = {};
-                let match;
-                let parsedBotCount = 0;
 
-                while ((match = regex.exec(translatedText)) !== null) {
-                    let key = match[1];
-                    let rawValue = match[2];
-                    try { newBotObj[key] = JSON.parse('"' + rawValue + '"'); } 
-                    catch (e) { newBotObj[key] = rawValue; }
-                    parsedBotCount++;
+                // Спроба 1: Розпарсити напряму як чистий JSON
+                let parsedDirectly = false;
+                try {
+                    const trimmed = translatedText.trim();
+                    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+                        const parsed = JSON.parse(trimmed);
+                        for (let k in parsed) {
+                            newBotObj[k] = parsed[k];
+                        }
+                        parsedDirectly = true;
+                    }
+                } catch (e) {
+                    // Якщо є зайві коментарі ШІ, розпарсимо за допомогою regex
                 }
 
-                if (parsedBotCount > 0) {
-                    log(`🤖 Зчитано ${parsedBotCount} перекладів з текстового поля.`, "log-info");
+                // Спроба 2: Regex парсинг пар "key": "value"
+                if (!parsedDirectly && translatedText.trim()) {
+                    const regex = /"([^"]+)"\s*:\s*"((?:[^"\\]|\\.)*)"/g;
+                    let match;
+                    while ((match = regex.exec(translatedText)) !== null) {
+                        const key = match[1];
+                        const rawVal = match[2];
+                        try {
+                            newBotObj[key] = JSON.parse(`"${rawVal}"`);
+                        } catch (err) {
+                            newBotObj[key] = rawVal.replace(/\\"/g, '"');
+                        }
+                    }
+                }
+
+                const botKeysCount = Object.keys(newBotObj).length;
+                if (botKeysCount > 0) {
+                    // Об'єднуємо новий фрагмент із раніше збереженими
+                    Object.assign(accumulatedTranslations, newBotObj);
+                    log(`🧩 Оброблено фрагмент: успішно додано ${botKeysCount} перекладів у загальну базу.`, "log-info");
+                    showToast(`+${botKeysCount} ключів успішно додано!`, "success");
                 } else if (translatedText.trim() !== "") {
-                    log(`⚠️ Текст в полі є, але ключі не знайдено. Перевір формат JSON.`, "log-warning");
+                    log(`⚠️ Не вдалося розпізнати пари "ключ": "значення" у вставленому тексті. Перевірте лапки.`, "log-warning");
                 }
 
-                // Збірка фінального об'єкту
+                // Формуємо фінальний об'єкт у порядку англійського оригіналу та знаходимо залишок
                 const finalObj = {};
+                const remainingToTranslate = {};
                 let stillMissingCount = 0;
+                let fromBotCount = 0;
+                let fromOldCount = 0;
 
                 for (let key in originalObj) {
-                    if (newBotObj.hasOwnProperty(key)) {
-                        finalObj[key] = newBotObj[key];
-                    } else if (oldTranslationObj.hasOwnProperty(key)) {
+                    if (Object.prototype.hasOwnProperty.call(accumulatedTranslations, key)) {
+                        finalObj[key] = accumulatedTranslations[key];
+                        fromBotCount++;
+                    } else if (Object.prototype.hasOwnProperty.call(oldTranslationObj, key)) {
                         finalObj[key] = oldTranslationObj[key];
+                        fromOldCount++;
                     } else {
-                        finalObj[key] = originalObj[key]; // Залишаємо англійський оригінал
+                        finalObj[key] = originalObj[key]; // Тимчасово підставляємо оригінал
+                        remainingToTranslate[key] = originalObj[key];
                         stillMissingCount++;
                     }
                 }
 
+                const totalKeys = Object.keys(originalObj).length;
+                const translatedTotal = totalKeys - stillMissingCount;
+
+                // Оновлення статистики
+                document.getElementById('statsGrid').style.display = 'grid';
+                document.getElementById('progressWrap').style.display = 'block';
+                document.getElementById('statTotal').textContent = totalKeys;
+                document.getElementById('statTranslated').textContent = translatedTotal;
+                document.getElementById('statMissing').textContent = stillMissingCount;
+                document.getElementById('statOutdated').textContent = "0";
+
+                const percentage = totalKeys > 0 ? Math.round((translatedTotal / totalKeys) * 100) : 0;
+                document.getElementById('progressBar').style.width = `${percentage}%`;
+
+                // Якщо ще залишились неперекладені рядки:
                 if (stillMissingCount > 0) {
-                    log(`⚠️ Зібрано, але залишилось не перекладено ${stillMissingCount} ключів (вставлено англійський текст).`, "log-warning");
+                    const remainingPrompt = `Переклади ці рядки українською мовою для Minecraft мода. Збережи назви ключів, %s, %d, {0} та § коди. Надай тільки JSON:\n\n` + JSON.stringify(remainingToTranslate, null, 2);
+                    
+                    log(`⚠️ Вам треба ще перекласти це (залишилось неперекладених ключів: ${stillMissingCount} із ${totalKeys}). Скопіюйте їх нижче для ШІ:`, "log-warning", remainingPrompt);
+                    
+                    // Очищаємо поле для зручності або даємо підказку
+                    document.getElementById('translatedText').value = '';
+                    showToast(`Залишилось перекласти: ${stillMissingCount} рядків. Скопіюйте їх для бота!`, "warning");
                 } else {
-                    log(`✅ Успішно зібрано! Всі ключі перекладено.`, "log-success");
+                    log(`🎉 Вітаємо! Локалізацію повністю завершено (100%). Всі ${totalKeys} ключів перекладено!`, "log-success");
+                    showToast("Переклад завершено на 100%!", "success");
                 }
 
-                // ЗБЕРЕЖЕННЯ
+                // Збереження в поточний проєкт
+                if (currentProjectName !== "_fast_") {
+                    projects[currentProjectName].translation = accumulatedTranslations;
+                    saveProjectsToStorage();
+                    updateProjectSelect();
+                    document.getElementById('projectSelect').value = currentProjectName;
+                    loadProjectInfo();
+                    log(`💾 Стан проєкту "${currentProjectName}" оновлено в пам'яті.`, "log-success");
+                }
+
+                finalJsonString = JSON.stringify(finalObj, null, 2);
+                document.getElementById('downloadCopyGroup').style.display = 'flex';
+
+            } catch (error) {
+                log(`Помилка: ${error.message}`, "log-error");
+                showToast(error.message, "error");
+            }
+        }
+
+        // --- 2. Збірка фінального перекладу ---
+        async function processTranslation() {
+            clearLog();
+            finalJsonString = "";
+            const translatedText = document.getElementById('translatedText').value;
+
+            try {
+                const { originalObj, oldTranslationObj } = await getFilesData();
+                const newBotObj = {};
+
+                // Спроба 1: Розпарсити напряму як чистий JSON
+                let parsedDirectly = false;
+                try {
+                    const trimmed = translatedText.trim();
+                    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+                        const parsed = JSON.parse(trimmed);
+                        for (let k in parsed) {
+                            newBotObj[k] = parsed[k];
+                        }
+                        parsedDirectly = true;
+                    }
+                } catch (e) {
+                    // Якщо в тексті є зайві коментарі ШІ, продовжуємо регулярним виразом
+                }
+
+                // Спроба 2: Regex парсинг пар "key": "value"
+                let regexCount = 0;
+                if (!parsedDirectly && translatedText.trim()) {
+                    const regex = /"([^"]+)"\s*:\s*"((?:[^"\\]|\\.)*)"/g;
+                    let match;
+                    while ((match = regex.exec(translatedText)) !== null) {
+                        const key = match[1];
+                        const rawVal = match[2];
+                        try {
+                            newBotObj[key] = JSON.parse(`"${rawVal}"`);
+                        } catch (err) {
+                            newBotObj[key] = rawVal.replace(/\\"/g, '"');
+                        }
+                        regexCount++;
+                    }
+                }
+
+                const botKeysCount = Object.keys(newBotObj).length;
+                if (botKeysCount > 0) {
+                    log(`🤖 З текстового поля ШІ зчитано ${botKeysCount} перекладених ключів.`, "log-info");
+                } else if (translatedText.trim() !== "") {
+                    log(`⚠️ Не вдалося розпізнати пари "ключ": "значення" в полі ШІ. Перевірте формат лапок.`, "log-warning");
+                }
+
+                // Збірка в строгому порядку англійського оригіналу
+                const finalObj = {};
+                let stillMissingCount = 0;
+                let fromBotCount = 0;
+                let fromOldCount = 0;
+
+                for (let key in originalObj) {
+                    if (Object.prototype.hasOwnProperty.call(newBotObj, key)) {
+                        finalObj[key] = newBotObj[key];
+                        fromBotCount++;
+                    } else if (Object.prototype.hasOwnProperty.call(oldTranslationObj, key)) {
+                        finalObj[key] = oldTranslationObj[key];
+                        fromOldCount++;
+                    } else {
+                        finalObj[key] = originalObj[key]; // Запасний варіант: англійський текст
+                        stillMissingCount++;
+                    }
+                }
+
+                const totalKeys = Object.keys(originalObj).length;
+                const translatedTotal = totalKeys - stillMissingCount;
+
+                // Оновлення блоку статистики
+                document.getElementById('statsGrid').style.display = 'grid';
+                document.getElementById('progressWrap').style.display = 'block';
+                document.getElementById('statTotal').textContent = totalKeys;
+                document.getElementById('statTranslated').textContent = translatedTotal;
+                document.getElementById('statMissing').textContent = stillMissingCount;
+                document.getElementById('statOutdated').textContent = "0";
+
+                const percentage = totalKeys > 0 ? Math.round((translatedTotal / totalKeys) * 100) : 0;
+                document.getElementById('progressBar').style.width = `${percentage}%`;
+
+                if (stillMissingCount > 0) {
+                    log(`⚠️ Зібрано ${totalKeys} ключів (Використано старих: ${fromOldCount}, нових від ШІ: ${fromBotCount}). Залишилось без перекладу: ${stillMissingCount} (вставлено en_us).`, "log-warning");
+                } else {
+                    log(`🎉 Локалізацію зібрано на 100%! Всі ${totalKeys} ключів успішно перекладено.`, "log-success");
+                }
+
+                // Збереження в проєкт
                 if (currentProjectName !== "_fast_") {
                     projects[currentProjectName].translation = finalObj;
                     saveProjectsToStorage();
                     updateProjectSelect();
                     document.getElementById('projectSelect').value = currentProjectName;
                     loadProjectInfo();
-                    log(`💾 Проект "${currentProjectName}" збережено в пам'ять браузера.`, "log-success");
+                    log(`💾 Зміни збережено в пам'ять проєкту "${currentProjectName}".`, "log-success");
                 }
-                
+
                 finalJsonString = JSON.stringify(finalObj, null, 2);
                 document.getElementById('downloadCopyGroup').style.display = 'flex';
+                showToast("JSON успішно зібрано!", "success");
 
             } catch (error) {
                 log(`Помилка: ${error.message}`, "log-error");
+                showToast(error.message, "error");
             }
         }
 
+        // --- Завантаження і копіювання ---
         function triggerDownload(content, filename) {
             const blob = new Blob([content], { type: "application/json;charset=utf-8" });
             const url = URL.createObjectURL(blob);
@@ -495,20 +1325,45 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            showToast(`Файл "${filename}" завантажено!`, "success");
         }
 
         function downloadJSON() {
-            if (finalJsonString) triggerDownload(finalJsonString, "uk_ua.json");
+            if (finalJsonString) {
+                const filename = currentProjectName !== "_fast_" ? `${currentProjectName}_uk_ua.json` : "uk_ua.json";
+                triggerDownload(finalJsonString, filename);
+            }
         }
 
-        function copyToClipboard() {
+        function executeCopy(text) {
+            const tempArea = document.createElement('textarea');
+            tempArea.value = text;
+            tempArea.style.position = 'fixed';
+            tempArea.style.left = '-9999px';
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error("Помилка копіювання:", err);
+            }
+            document.body.removeChild(tempArea);
+        }
+
+        function copyFinalJSON() {
             if (!finalJsonString) return;
-            navigator.clipboard.writeText(finalJsonString).then(() => {
-                const copyBtn = document.getElementById('copyBtn');
-                const originalHtml = copyBtn.innerHTML;
-                copyBtn.innerHTML = 'Скопійовано!';
-                setTimeout(() => { copyBtn.innerHTML = originalHtml; }, 2000);
-            }).catch(err => alert("Помилка копіювання: " + err));
+            executeCopy(finalJsonString);
+            const copyBtn = document.getElementById('copyBtn');
+            const originalHtml = copyBtn.innerHTML;
+            copyBtn.innerHTML = '✔ Скопійовано в буфер!';
+            showToast("JSON скопійовано в буфер обміну!", "success");
+            setTimeout(() => { copyBtn.innerHTML = originalHtml; }, 2200);
+        }
+
+        // --- Тестовий приклад для швидкої перевірки ---
+        function insertMockData() {
+            document.getElementById('translatedText').value = `{\n  "block.hexcasting.slate": "Сланцева скрижаль",\n  "item.hexcasting.wand": "Чарівний жезл кастування",\n  "spell.hexcasting.teleport": "Телепортація крізь простір"\n}`;
+            showToast("Приклад вставлено в поле перекладу", "info");
         }
     </script>
 </body>
