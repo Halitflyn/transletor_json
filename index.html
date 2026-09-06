@@ -6,23 +6,25 @@
     <title>Minecraft JSON Builder PRO</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-body: #090d16;
-            --bg-card: #111827;
-            --bg-card-hover: #162033;
-            --bg-input: #0b1120;
-            --border: #1f293d;
+            --bg-body: #070b14;
+            --bg-card: #0f172a;
+            --bg-card-hover: #17233d;
+            --bg-input: #090e1a;
+            --border: #1e293b;
             --border-hover: #334155;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --primary: #6366f1;
             --primary-hover: #4f46e5;
-            --primary-glow: rgba(99, 102, 241, 0.25);
+            --primary-glow: rgba(99, 102, 241, 0.3);
+            --cyan: #38bdf8;
+            --cyan-glow: rgba(56, 189, 248, 0.3);
             --success: #10b981;
             --success-hover: #059669;
-            --success-glow: rgba(16, 185, 129, 0.2);
+            --success-glow: rgba(16, 185, 129, 0.25);
             --danger: #ef4444;
             --danger-hover: #dc2626;
             --warning: #f59e0b;
@@ -40,46 +42,46 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: radial-gradient(circle at 50% 0%, #172554 0%, var(--bg-body) 60%);
+            background: radial-gradient(circle at 50% -10%, #1e1b4b 0%, #0c1527 35%, var(--bg-body) 70%);
             color: var(--text-main);
             min-height: 100vh;
-            padding: 30px 16px 60px;
+            padding: 24px 16px 60px;
             line-height: 1.5;
         }
 
         .container {
-            max-width: 940px;
+            max-width: 960px;
             margin: 0 auto;
         }
 
         header {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
         }
 
         .logo-wrap {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 52px;
-            height: 52px;
-            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            width: 54px;
+            height: 54px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
             border-radius: 14px;
-            box-shadow: 0 8px 24px var(--primary-glow);
+            box-shadow: 0 10px 28px var(--primary-glow);
             margin-bottom: 12px;
         }
 
         .logo-wrap svg {
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             fill: #ffffff;
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 800;
             letter-spacing: -0.5px;
-            background: linear-gradient(to right, #ffffff, #94a3b8);
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 6px;
@@ -102,15 +104,15 @@
         }
 
         .toast {
-            min-width: 280px;
+            min-width: 290px;
             max-width: 380px;
             padding: 12px 16px;
             border-radius: var(--radius-md);
             background: #1e293b;
             color: #fff;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 500;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+            box-shadow: 0 14px 30px -4px rgba(0,0,0,0.6);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -122,10 +124,56 @@
         .toast-success { border-color: var(--success); background: #064e3b; }
         .toast-error { border-color: var(--danger); background: #7f1d1d; }
         .toast-warning { border-color: var(--warning); background: #78350f; }
+        .toast-info { border-color: var(--primary); background: #1e1b4b; }
 
         @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
+            from { transform: translateX(110%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 9998;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-hover);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
         }
 
         .project-card {
@@ -133,33 +181,27 @@
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             padding: 16px 20px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
         }
 
         .project-card-title {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 600;
             color: var(--text-muted);
-            width: 100%;
-            margin-bottom: 2px;
+            margin-bottom: 10px;
         }
 
         .project-actions {
             display: flex;
-            gap: 8px;
-            width: 100%;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
-        select, input[type="text"] {
+        select, input[type="text"], input[type="number"] {
             background-color: var(--bg-input);
             color: var(--text-main);
             border: 1px solid var(--border);
@@ -172,9 +214,9 @@
             min-width: 180px;
         }
 
-        select:focus, input[type="text"]:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-glow);
+        select:focus, input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px var(--cyan-glow);
         }
 
         .steps-grid {
@@ -185,9 +227,7 @@
         }
 
         @media (max-width: 768px) {
-            .steps-grid {
-                grid-template-columns: 1fr;
-            }
+            .steps-grid { grid-template-columns: 1fr; }
         }
 
         .card {
@@ -195,13 +235,11 @@
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
             transition: border-color 0.2s;
         }
 
-        .card:hover {
-            border-color: var(--border-hover);
-        }
+        .card:hover { border-color: var(--border-hover); }
 
         .card-header {
             display: flex;
@@ -238,23 +276,24 @@
             gap: 4px;
         }
 
-        .badge-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
-        .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .badge-warning { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
+        .badge-success { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
+        .badge-cyan { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); }
 
         .file-dropzone {
             border: 2px dashed var(--border);
             border-radius: var(--radius-md);
-            padding: 24px 16px;
+            padding: 20px 14px;
             text-align: center;
-            background: rgba(15, 23, 42, 0.4);
+            background: rgba(9, 14, 26, 0.5);
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
         }
 
         .file-dropzone:hover, .file-dropzone.dragover {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--cyan);
+            background: rgba(56, 189, 248, 0.05);
         }
 
         .file-dropzone input[type="file"] {
@@ -265,59 +304,80 @@
             height: 100%;
             opacity: 0;
             cursor: pointer;
-            z-index: 5;
-        }
-
-        .file-dropzone-icon {
-            margin-bottom: 8px;
-            pointer-events: none;
         }
 
         .file-dropzone-icon svg {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             fill: var(--text-muted);
-            transition: fill 0.2s;
+            margin-bottom: 6px;
         }
 
-        .file-dropzone:hover .file-dropzone-icon svg {
-            fill: var(--primary);
+        .file-dropzone:hover .file-dropzone-icon svg { fill: var(--cyan); }
+        .file-dropzone-text { font-size: 13px; color: var(--text-muted); }
+        .file-dropzone-name { font-size: 13px; font-weight: 600; color: var(--success); margin-top: 6px; display: none; word-break: break-all; }
+
+        .batch-limiter-panel {
+            background: linear-gradient(180deg, #111b33 0%, var(--bg-card) 100%);
+            border: 1px solid #1e2d4d;
+            border-radius: var(--radius-lg);
+            padding: 18px 20px;
+            margin-bottom: 16px;
         }
 
-        .file-dropzone-text {
-            font-size: 13px;
-            color: var(--text-muted);
-            pointer-events: none;
+        .limiter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
         }
 
-        .file-dropzone-name {
-            font-size: 13px;
+        .limiter-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .limiter-inputs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            background: #1e293b;
+            color: #cbd5e1;
+            border: 1px solid #334155;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 600;
-            color: var(--success);
-            word-break: break-all;
-            margin-top: 6px;
-            display: none;
-            pointer-events: none;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .step-full {
-            margin-bottom: 24px;
+        .preset-btn:hover, .preset-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
+
+        .step-full { margin-bottom: 20px; }
 
         .textarea-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 8px;
-            flex-wrap: wrap;
-            gap: 8px;
         }
 
-        .textarea-controls {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
+        .textarea-controls { display: flex; gap: 8px; }
 
         .btn-text {
             background: transparent;
@@ -327,104 +387,13 @@
             font-size: 12px;
             cursor: pointer;
             border-radius: var(--radius-sm);
-            transition: color 0.15s;
         }
 
-        .btn-text:hover {
-            color: #fff;
-            background: rgba(255,255,255,0.05);
-        }
-
-        .fragment-badge {
-            background: rgba(99, 102, 241, 0.15);
-            color: #a5b4fc;
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            font-size: 11px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 12px;
-        }
-
-        .batch-config-box {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 14px 16px;
-            margin-bottom: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .batch-config-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #cbd5e1;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .batch-inputs-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .batch-char-input {
-            width: 140px;
-            min-width: 120px;
-            padding: 7px 10px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #38bdf8;
-            background: #020617;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            text-align: center;
-        }
-
-        .preset-pills {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .preset-pill {
-            background: #1e293b;
-            color: #94a3b8;
-            border: 1px solid #334155;
-            padding: 4px 10px;
-            font-size: 11px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.15s ease;
-        }
-
-        .preset-pill:hover, .preset-pill.active {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-
-        .batch-meta-tag {
-            font-size: 11px;
-            background: rgba(56, 189, 248, 0.12);
-            color: #38bdf8;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
+        .btn-text:hover { color: #fff; background: rgba(255,255,255,0.06); }
 
         textarea {
             width: 100%;
-            height: 170px;
+            height: 160px;
             background-color: var(--bg-input);
             color: var(--text-main);
             border: 1px solid var(--border);
@@ -435,25 +404,23 @@
             line-height: 1.6;
             resize: vertical;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: border-color 0.2s;
         }
 
         textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-glow);
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px var(--cyan-glow);
         }
 
         .button-bar {
             display: grid;
-            grid-template-columns: 1.2fr 1.2fr auto;
+            grid-template-columns: 1fr 1.3fr auto;
             gap: 12px;
             margin-bottom: 24px;
         }
 
         @media (max-width: 640px) {
-            .button-bar {
-                grid-template-columns: 1fr;
-            }
+            .button-bar { grid-template-columns: 1fr; }
         }
 
         button {
@@ -472,70 +439,47 @@
             outline: none;
         }
 
-        button:active {
-            transform: scale(0.98);
-        }
+        button:active { transform: scale(0.98); }
 
         .btn-primary {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
             box-shadow: 0 4px 14px var(--primary-glow);
         }
+        .btn-primary:hover { background: linear-gradient(135deg, #4338ca, #4f46e5); }
 
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
+        .btn-cyan {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            box-shadow: 0 4px 14px var(--cyan-glow);
         }
+        .btn-cyan:hover { background: linear-gradient(135deg, #0369a1, #0284c7); }
 
         .btn-warning {
-            background-color: var(--warning);
+            background: linear-gradient(135deg, #d97706, #f59e0b);
             box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
         }
-
-        .btn-warning:hover {
-            background-color: var(--warning-hover);
-        }
+        .btn-warning:hover { background: linear-gradient(135deg, #b45309, #d97706); }
 
         .btn-success {
-            background-color: var(--success);
+            background: linear-gradient(135deg, #059669, #10b981);
             box-shadow: 0 4px 14px var(--success-glow);
         }
+        .btn-success:hover { background: linear-gradient(135deg, #047857, #059669); }
 
-        .btn-success:hover {
-            background-color: var(--success-hover);
-        }
+        .btn-danger { background-color: #1e293b; color: #f87171; border: 1px solid var(--border); }
+        .btn-danger:hover { background-color: var(--danger); color: white; border-color: var(--danger); }
 
-        .btn-danger {
-            background-color: #334155;
-            color: #f87171;
-        }
+        .btn-secondary { background-color: #1e293b; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-secondary:hover { background-color: #334155; }
+        .btn-icon { padding: 10px; min-width: 44px; }
 
-        .btn-danger:hover {
-            background-color: var(--danger);
-            color: white;
-        }
-
-        .btn-secondary {
-            background-color: #1e293b;
-            border: 1px solid var(--border);
-            color: var(--text-main);
-        }
-
-        .btn-secondary:hover {
-            background-color: #334155;
-            border-color: #475569;
-        }
-
-        .btn-icon {
-            padding: 10px;
-            min-width: 44px;
-        }
-
-        .log-section {
-            background-color: var(--bg-card);
+        .dashboard-container {
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            padding: 24px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
             display: none;
+            margin-bottom: 24px;
             animation: fadeIn 0.3s ease;
         }
 
@@ -544,19 +488,292 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .log-header {
+        .dashboard-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
-        .log-title {
+        .dashboard-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .radial-stats-grid {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 24px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .radial-stats-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        .radial-gauge-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .radial-svg {
+            transform: rotate(-90deg);
+            width: 190px;
+            height: 190px;
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: #1e293b;
+            stroke-width: 12;
+        }
+
+        .circle-progress {
+            fill: none;
+            stroke: url(#cyanPurpleGradient);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 301.59;
+            stroke-dashoffset: 301.59;
+            transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .gauge-inner-content {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gauge-percent {
+            font-size: 34px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .gauge-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--cyan);
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .stats-details-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .stats-details-list { grid-template-columns: 1fr; }
+        }
+
+        .detail-card {
+            background: #090e1a;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11.5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .detail-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin: 4px 0 2px;
+        }
+
+        .detail-sub {
+            font-size: 11.5px;
+            color: #94a3b8;
+        }
+
+        .rounds-dashboard-panel {
+            background: rgba(11, 17, 32, 0.95);
+            border: 1px solid #1e293b;
+            border-radius: var(--radius-md);
+            padding: 18px;
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .rounds-dashboard-panel {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        .rounds-info-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rounds-title {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
+            color: #38bdf8;
+        }
+
+        .rounds-big-counter {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .round-number-active {
+            font-size: 32px;
+            font-weight: 800;
+            color: #f8fafc;
+            line-height: 1;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .round-number-total {
+            font-size: 15px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .rounds-status-text {
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        .rounds-timeline {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            max-height: 80px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .round-pill {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            transition: all 0.2s;
+        }
+
+        .round-pill.completed {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .round-pill.current {
+            background: rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+            border-color: rgba(56, 189, 248, 0.5);
+            animation: pulseGlow 1.5s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0px rgba(56, 189, 248, 0.2); }
+            100% { box-shadow: 0 0 8px rgba(56, 189, 248, 0.6); }
+        }
+
+        .mosaic-stage-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #020617;
+            border: 1px solid #1e293d;
+            border-radius: var(--radius-md);
+            padding: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mosaic-svg {
+            width: 170px;
+            height: 170px;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 6px 16px rgba(0,0,0,0.5));
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .mosaic-svg.enchanted {
+            animation: enchantedGlint 2.5s infinite linear, swordFloat 3s infinite ease-in-out;
+            filter: drop-shadow(0 0 14px rgba(168, 85, 247, 0.7));
+        }
+
+        @keyframes swordFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(1deg); }
+        }
+
+        @keyframes enchantedGlint {
+            0% { filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.6)); }
+            50% { filter: drop-shadow(0 0 20px rgba(217, 70, 239, 0.8)); }
+            100% { filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.6)); }
+        }
+
+        .mosaic-caption {
+            margin-top: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pixel-rect {
+            transition: fill 0.3s ease, opacity 0.3s ease;
+        }
+
+        .pixel-rect.unlocked {
+            animation: popVoxel 0.35s ease forwards;
+        }
+
+        @keyframes popVoxel {
+            0% { transform-origin: center; transform: scale(0.4); opacity: 0.3; }
+            70% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .log-list {
@@ -571,7 +788,7 @@
             border-radius: var(--radius-md);
             font-size: 13px;
             border-left: 4px solid;
-            background: rgba(15, 23, 42, 0.7);
+            background: rgba(15, 23, 42, 0.8);
         }
 
         .log-item-title {
@@ -587,185 +804,72 @@
         .log-info { border-color: var(--primary); color: #818cf8; }
         .log-removed { border-color: #e11d48; color: #fb7185; }
 
-        .code-box {
+        .batch-output-panel {
             margin-top: 10px;
             background: #020617;
             border: 1px solid #1e293b;
+            border-radius: var(--radius-md);
+            padding: 14px;
+        }
+
+        .batch-output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .batch-badge {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .code-box {
+            background: #090d16;
+            border: 1px solid #1f293d;
             border-radius: var(--radius-sm);
             padding: 12px;
             font-family: 'Fira Code', monospace;
             font-size: 12px;
-            color: #cbd5e1;
+            color: #e2e8f0;
             white-space: pre;
             overflow-x: auto;
             max-height: 220px;
             line-height: 1.5;
         }
 
-        .copy-snippet-btn {
+        .batch-btn-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-copy-action {
             background: #1e293b;
             border: 1px solid #334155;
-            color: #94a3b8;
-            font-size: 11px;
-            padding: 6px 10px;
-            border-radius: 4px;
+            color: #cbd5e1;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            margin-top: 8px;
             display: inline-flex;
             align-items: center;
             gap: 6px;
             font-weight: 600;
+            transition: all 0.2s;
         }
 
-        .copy-snippet-btn:hover {
+        .btn-copy-action:hover {
             color: #fff;
             background: #334155;
-        }
-
-        .progress-dashboard {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 24px;
-            align-items: center;
-        }
-
-        @media (max-width: 680px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-                justify-items: center;
-                text-align: center;
-            }
-        }
-
-        .circle-chart-wrap {
-            position: relative;
-            width: 140px;
-            height: 140px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .circle-chart {
-            width: 100%;
-            height: 100%;
-            transform: rotate(-90deg);
-        }
-
-        .circle-bg {
-            fill: none;
-            stroke: #1e293b;
-            stroke-width: 10;
-        }
-
-        .circle-progress {
-            fill: none;
-            stroke: url(#progressGradient);
-            stroke-width: 10;
-            stroke-linecap: round;
-            stroke-dasharray: 326.73;
-            stroke-dashoffset: 326.73;
-            transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .circle-center-text {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-        }
-
-        .circle-pct {
-            font-size: 24px;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: -0.5px;
-            line-height: 1;
-        }
-
-        .circle-label {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--text-muted);
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            margin-top: 4px;
-        }
-
-        .dashboard-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            width: 100%;
-        }
-
-        @media (max-width: 480px) {
-            .dashboard-details {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .detail-card {
-            background: rgba(11, 17, 32, 0.8);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 12px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            transition: border-color 0.2s;
-        }
-
-        .detail-card:hover {
-            border-color: var(--border-hover);
-        }
-
-        .detail-header {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .detail-value {
-            font-size: 16px;
-            font-weight: 700;
-            color: #fff;
-            white-space: nowrap;
-        }
-
-        .detail-sub {
-            font-size: 11px;
-            color: #94a3b8;
-        }
-
-        .strict-batch-badge {
-            background: rgba(16, 185, 129, 0.15);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.35);
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 6px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
+            border-color: #475569;
         }
 
         .action-row {
@@ -787,42 +891,50 @@
 
     <div id="toastContainer"></div>
 
+    <div id="confirmModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div class="modal-title" id="confirmModalTitle">Підтвердження</div>
+            <div class="modal-text" id="confirmModalText">Ви дійсно хочете виконати цю дію?</div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" id="confirmModalCancel">Скасувати</button>
+                <button class="btn-danger" id="confirmModalOk">Підтвердити</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <div class="logo-wrap">
                 <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7.5l-10-5v10l10 5 10-5v-10l-10 5z"/></svg>
             </div>
             <h1>Minecraft JSON Builder PRO</h1>
-            <p class="subtitle">Швидка актуалізація, пошук нових ключів та якісна локалізація модів</p>
+            <p class="subtitle">Покроковий переклад з ШІ за лімітом символів, кузня артефакту та круги прогресу</p>
         </header>
 
-        <!-- Project Bar -->
         <div class="project-card">
             <div class="project-card-title">
                 <svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-                <span>Проєкт перекладу</span>
+                <span>Проєкт локалізації (пам'ять сеансів)</span>
             </div>
             <div class="project-actions">
                 <select id="projectSelect" onchange="loadProjectInfo()">
                     <option value="_fast_">⚡ Швидкий сеанс (без збереження в пам'ять)</option>
                 </select>
 
-                <button id="downloadProjectBtn" class="btn-secondary btn-icon" style="display: none;" onclick="downloadSavedProject()" title="Завантажити збережений переклад">
+                <button id="downloadProjectBtn" class="btn-secondary btn-icon" style="display: none;" onclick="downloadSavedProject()" title="Завантажити поточний JSON з пам'яті">
                     <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
                 </button>
 
-                <button id="deleteProjectBtn" class="btn-danger btn-icon" style="display: none;" onclick="deleteCurrentProject()" title="Видалити цей проєкт">
+                <button id="deleteProjectBtn" class="btn-danger btn-icon" style="display: none;" onclick="promptDeleteProject()" title="Видалити цей проєкт">
                     <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                 </button>
 
-                <input type="text" id="newProjectName" placeholder="Назва нового мода / проєкту...">
+                <input type="text" id="newProjectName" placeholder="Назва моду або збірки...">
                 <button class="btn-primary" onclick="createProject()">+ Створити</button>
             </div>
         </div>
 
-        <!-- File Uploads Grid -->
         <div class="steps-grid">
-            <!-- Step 1 -->
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
@@ -832,7 +944,7 @@
                     <span class="badge badge-warning">Обов'язково</span>
                 </div>
                 <div class="file-dropzone" id="dropzoneOrig">
-                    <input type="file" id="originalFile" accept=".json" onchange="handleFileSelected('originalFile')">
+                    <input type="file" id="originalFile" accept=".json" onchange="handleFileSelected('originalFile', 'dropzoneOrigText', 'dropzoneOrigName')">
                     <div class="file-dropzone-icon">
                         <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
                     </div>
@@ -841,22 +953,42 @@
                 </div>
             </div>
 
-            <!-- Step 2 -->
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
                         <svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
                         <span>2. Старий переклад</span>
                     </div>
-                    <span class="badge badge-warning" id="projectStatusBadge">Одноразовий</span>
+                    <span class="badge badge-cyan" id="projectStatusBadge">Одноразовий</span>
                 </div>
                 <div class="file-dropzone" id="dropzoneOld">
-                    <input type="file" id="oldTranslationFile" accept=".json" onchange="handleFileSelected('oldTranslationFile')">
+                    <input type="file" id="oldTranslationFile" accept=".json" onchange="handleFileSelected('oldTranslationFile', 'dropzoneOldText', 'dropzoneOldName')">
                     <div class="file-dropzone-icon">
                         <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
                     </div>
-                    <div class="file-dropzone-text" id="dropzoneOldText">Перетягніть старий uk_ua.json (опціонально)</div>
+                    <div class="file-dropzone-text" id="dropzoneOldText">Перетягніть uk_ua.json (необов'язково)</div>
                     <div class="file-dropzone-name" id="dropzoneOldName"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="batch-limiter-panel">
+            <div class="limiter-header">
+                <div class="limiter-title">
+                    <svg viewBox="0 0 24 24" style="fill: var(--cyan); width: 20px; height: 20px;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                    <span>Розумна нарізка для ШІ (ліміт символів на 1 круг)</span>
+                </div>
+                <span class="badge badge-success">✔ Жоден рядок не обрізається</span>
+            </div>
+
+            <div class="limiter-inputs">
+                <input type="number" id="batchCharLimit" value="3500" min="500" max="50000" step="100" style="max-width: 140px;" title="Максимальна кількість символів у запиті">
+                <span style="font-size: 13px; color: var(--text-muted);">символів на запит</span>
+                <div style="display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap;">
+                    <button type="button" class="preset-btn" onclick="setCharLimit(2000)">2 000</button>
+                    <button type="button" class="preset-btn active" id="btnPresetDefault" onclick="setCharLimit(3500)">3 500</button>
+                    <button type="button" class="preset-btn" onclick="setCharLimit(5000)">5 000</button>
+                    <button type="button" class="preset-btn" onclick="setCharLimit(8000)">8 000</button>
                 </div>
             </div>
         </div>
@@ -865,33 +997,14 @@
             <div class="textarea-header">
                 <div class="card-title">
                     <svg viewBox="0 0 24 24"><path d="M21 11.5v-1c0-3.8-3.1-7-7-7h-1V2c0-.6-.4-1-1-1s-1 .4-1 1v1.5h-1c-3.8 0-7 3.2-7 7v1H2v2h2v1c0 3.8 3.1 7 7 7h1v1.5c0 .6.4 1 1 1s1-.4 1-1V22h1c3.8 0 7-3.2 7-7v-1h2v-2h-2zm-10 7.5c-2.8 0-5-2.2-5-5v-1h10v1c0 2.8-2.2 5-5 5zm5-8H6v-1c0-2.8 2.2-5 5-5h2c2.8 0 5 2.2 5 5v1z"/></svg>
-                    <span>3. Нові переклади від ШІ (можна вставляти частинами)</span>
-                    <span class="fragment-badge">Поетапний режим</span>
+                    <span>3. Вставте перекладений фрагмент від бота</span>
                 </div>
                 <div class="textarea-controls">
-                    <button class="btn-text" onclick="insertMockData()" title="Вставити тестовий приклад">Тестовий приклад</button>
-                    <button class="btn-text" onclick="clearInputArea()" title="Очистити поле для наступного фрагменту">Очистити поле</button>
+                    <button class="btn-text" onclick="insertMockData()">Тестовий приклад</button>
+                    <button class="btn-text" onclick="document.getElementById('translatedText').value = ''">Очистити</button>
                 </div>
             </div>
-
-            <div class="batch-config-box">
-                <div class="batch-config-title">
-                    <span>✂️ Розумна нарізка порцій під ліміт ШІ</span>
-                    <span class="batch-meta-tag" id="batchCurrentCountBadge">Порція розраховується автоматично</span>
-                </div>
-                <div class="batch-inputs-row">
-                    <label style="font-size:12px; color:var(--text-muted);">Ліміт символів на 1 запит:</label>
-                    <input type="number" id="batchCharLimit" class="batch-char-input" value="3500" min="500" max="25000" step="500" onchange="onBatchLimitChange()">
-                    <div class="preset-pills">
-                        <span class="preset-pill" onclick="setBatchLimit(2000)">2 000</span>
-                        <span class="preset-pill active" onclick="setBatchLimit(3500)">3 500</span>
-                        <span class="preset-pill" onclick="setBatchLimit(5000)">5 000</span>
-                        <span class="preset-pill" onclick="setBatchLimit(8000)">8 000</span>
-                    </div>
-                </div>
-            </div>
-
-            <textarea id="translatedText" placeholder='Вставляйте сюди відповіді ШІ цілком або фрагментами (наприклад, по 50-100 рядків).&#10;При кожному натисканні "2. Застосувати фрагмент і зібрати" система збереже фрагмент і покаже наступну порцію!'></textarea>
+            <textarea id="translatedText" placeholder='Вставте сюди чергову відповідь ШІ (наприклад: "item.mod.sword": "Діамантовий меч", ...)'></textarea>
         </div>
 
         <!-- Action Controls -->
@@ -900,75 +1013,106 @@
                 <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                 1. Аналізувати файли
             </button>
-            <button class="btn-primary" onclick="processTranslation()">
+            <button class="btn-cyan" onclick="processTranslation()">
                 <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                 2. Застосувати фрагмент і зібрати
             </button>
-            <button class="btn-danger btn-icon" onclick="resetForm()" title="Повністю скинути форми">
+            <button class="btn-danger btn-icon" onclick="resetForm()" title="Очистити все">
                 <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
             </button>
         </div>
 
-        <div id="logArea" class="log-section">
-            <div class="log-header">
-                <div class="log-title">
-                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-                    <span>Статистика та Звіт</span>
+        <div id="logArea" class="dashboard-container">
+            <div class="dashboard-header">
+                <div class="dashboard-title">
+                    <svg viewBox="0 0 24 24" style="fill: var(--cyan);"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                    <span>Статус перекладу та Кузня Артефакту</span>
                 </div>
             </div>
 
-            <div class="progress-dashboard" id="progressDashboard" style="display:none;">
-                <div class="dashboard-grid">
-                    <div class="circle-chart-wrap">
-                        <svg class="circle-chart" viewBox="0 0 120 120">
-                            <defs>
-                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#f59e0b" />
-                                    <stop offset="60%" stop-color="#6366f1" />
-                                    <stop offset="100%" stop-color="#10b981" />
-                                </linearGradient>
-                            </defs>
-                            <circle class="circle-bg" cx="60" cy="60" r="52" />
-                            <circle class="circle-progress" id="circleProgressBar" cx="60" cy="60" r="52" />
-                        </svg>
-                        <div class="circle-center-text">
-                            <div class="circle-pct" id="circlePctText">0%</div>
-                            <div class="circle-label">ПРОГРЕС</div>
+            <div class="radial-stats-grid">
+                <div class="radial-gauge-wrapper">
+                    <svg class="radial-svg" viewBox="0 0 120 120">
+                        <defs>
+                            <linearGradient id="cyanPurpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#38bdf8" />
+                                <stop offset="100%" stop-color="#818cf8" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="circle-bg" cx="60" cy="60" r="48" />
+                        <circle class="circle-progress" id="circleProgress" cx="60" cy="60" r="48" />
+                    </svg>
+                    <div class="gauge-inner-content">
+                        <span class="gauge-percent" id="circlePercentage">0%</span>
+                        <span class="gauge-label">Виковано</span>
+                    </div>
+                </div>
+
+                <div class="stats-details-list">
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <span>📑 Рядки (ключі)</span>
                         </div>
+                        <div class="detail-value" id="statKeysValue">0 / 0</div>
+                        <div class="detail-sub" id="statKeysSub">0% перекладено</div>
                     </div>
 
-                    <div class="dashboard-details">
-                        <div class="detail-card">
-                            <div class="detail-header">
-                                <span>📑 Рядки (ключі)</span>
-                            </div>
-                            <div class="detail-value" id="statKeysValue" style="color: #38bdf8;">0 / 0</div>
-                            <div class="detail-sub" id="statKeysSub">Перекладено 0%</div>
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <span>🔤 Текст (символи)</span>
                         </div>
+                        <div class="detail-value" id="statCharsValue">0 / 0</div>
+                        <div class="detail-sub" id="statCharsSub">0% символів</div>
+                    </div>
 
-                        <div class="detail-card">
-                            <div class="detail-header">
-                                <span>🔤 Символи тексту</span>
-                            </div>
-                            <div class="detail-value" id="statCharsValue" style="color: #a78bfa;">0 / 0</div>
-                            <div class="detail-sub" id="statCharsSub">Обсяг готового тексту</div>
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <span>⏳ Потребують ШІ</span>
                         </div>
+                        <div class="detail-value" id="statMissingValue" style="color: var(--warning);">0</div>
+                        <div class="detail-sub" id="statMissingCharsSub">~0 символів</div>
+                    </div>
 
-                        <div class="detail-card">
-                            <div class="detail-header">
-                                <span>✂️ Залишилось перекласти</span>
-                            </div>
-                            <div class="detail-value" id="statRemainingValue" style="color: var(--warning);">0 ключів</div>
-                            <div class="detail-sub" id="statRemainingSub">0 символів для черги ШІ</div>
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <span>🗑️ Застарілі ключі</span>
                         </div>
+                        <div class="detail-value" id="statOutdatedValue" style="color: #f87171;">0</div>
+                        <div class="detail-sub">Відсутні в оригіналі</div>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="detail-card">
-                            <div class="detail-header">
-                                <span>🗑️ Застарілі ключі</span>
-                            </div>
-                            <div class="detail-value" id="statOutdatedValue" style="color: #f87171;">0</div>
-                            <div class="detail-sub">Відсутні в оригіналі</div>
-                        </div>
+            <!-- Rounds Tracker & Minecraft Pixel Forge Panel -->
+            <div class="rounds-dashboard-panel">
+                <div class="rounds-info-wrap">
+                    <div class="rounds-title">
+                        <svg viewBox="0 0 24 24" style="fill:#38bdf8; width:20px; height:20px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+                        <span>Круги перекладу з ШІ</span>
+                    </div>
+
+                    <div class="rounds-big-counter">
+                        <span class="round-number-active" id="currentRoundText">Круг 0</span>
+                        <span class="round-number-total" id="estimatedRoundsText">з ~0 запланованих</span>
+                    </div>
+
+                    <div class="rounds-status-text" id="roundStatusMessage">
+                        Завантажте файли, щоб розпочати перший круг перекладу.
+                    </div>
+
+                    <div class="rounds-timeline" id="roundsTimeline">
+                        <!-- Round pills injected here -->
+                    </div>
+                </div>
+
+                <!-- Pixel-Art SVG Relic (Diamond Sword Forge) -->
+                <div class="mosaic-stage-wrap">
+                    <svg class="mosaic-svg" id="mosaicSvg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+                        <!-- Pixels rendered via JS -->
+                    </svg>
+                    <div class="mosaic-caption">
+                        <span id="mosaicName">🗡️ Діамантовий Меч</span>
+                        <span id="mosaicBlocksCount" style="color: #38bdf8;">(0/42)</span>
                     </div>
                 </div>
             </div>
@@ -980,25 +1124,10 @@
                     <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
                     Завантажити uk_ua.json
                 </button>
-                <button id="copyBtn" class="btn-primary" onclick="copyFinalJSON()">
+                <button id="copyFinalBtn" class="btn-cyan" onclick="copyFinalJSON()">
                     <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                    Копіювати код
+                    Копіювати фінальний JSON
                 </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Confirmation Modal (No alert/confirm) -->
-    <div id="confirmModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:10000; align-items:center; justify-content:center; padding:16px;">
-        <div style="background:#111827; border:1px solid #334155; border-radius:16px; max-width:400px; width:100%; padding:24px; box-shadow:0 20px 25px -5px rgba(0,0,0,0.6); text-align:center;">
-            <div style="width:48px; height:48px; border-radius:50%; background:rgba(239,68,68,0.15); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; color:#ef4444;">
-                <svg viewBox="0 0 24 24" style="width:28px; height:28px; fill:currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-            </div>
-            <h3 style="font-size:18px; font-weight:700; color:#f8fafc; margin-bottom:8px;" id="confirmModalTitle">Підтвердження</h3>
-            <p style="font-size:14px; color:#94a3b8; margin-bottom:20px;" id="confirmModalText">Ви дійсно хочете виконати цю дію?</p>
-            <div style="display:flex; gap:12px; justify-content:center;">
-                <button class="btn-secondary" id="confirmModalCancel" style="flex:1;">Скасувати</button>
-                <button class="btn-danger" id="confirmModalOk" style="flex:1; background-color:#ef4444; color:#fff;">Видалити</button>
             </div>
         </div>
     </div>
@@ -1009,8 +1138,69 @@
         let finalJsonString = "";
         let accumulatedTranslations = {};
         let loadedFiles = { original: null, old: null };
+        let salvagedObjects = { original: null, old: null };
         let activeMissingKeysMap = {};
         let confirmActionCallback = null;
+
+        // Rounds tracking & Pixel Forge State
+        let currentRoundNumber = 0;
+        let completedRoundsHistory = [];
+        let totalEstimatedRounds = 1;
+
+        // 16x16 Minecraft Diamond Sword Pixel Definition (42 pixels total)
+        const SWORD_PIXELS = [
+            // Pommel / Handle base
+            { x: 1, y: 14, color: '#4a2c11' },
+            { x: 2, y: 14, color: '#6d421d' },
+            { x: 1, y: 13, color: '#6d421d' },
+            { x: 2, y: 13, color: '#8e5929' },
+            { x: 3, y: 12, color: '#8e5929' },
+            { x: 4, y: 11, color: '#8e5929' },
+            
+            // Guard
+            { x: 1, y: 11, color: '#2b1d0c' },
+            { x: 2, y: 11, color: '#0f766e' },
+            { x: 3, y: 11, color: '#14b8a6' },
+            { x: 2, y: 12, color: '#14b8a6' },
+            { x: 4, y: 12, color: '#0f766e' },
+            { x: 5, y: 12, color: '#14b8a6' },
+            { x: 5, y: 13, color: '#0f766e' },
+            { x: 4, y: 10, color: '#14b8a6' },
+            { x: 5, y: 11, color: '#2dd4bf' },
+            { x: 5, y: 10, color: '#14b8a6' },
+
+            // Blade core
+            { x: 6, y: 9, color: '#2dd4bf' },
+            { x: 6, y: 10, color: '#0f766e' },
+            { x: 7, y: 8, color: '#2dd4bf' },
+            { x: 7, y: 9, color: '#0f766e' },
+            { x: 8, y: 7, color: '#2dd4bf' },
+            { x: 8, y: 8, color: '#0f766e' },
+            { x: 9, y: 6, color: '#5eead4' },
+            { x: 9, y: 7, color: '#14b8a6' },
+            { x: 10, y: 5, color: '#5eead4' },
+            { x: 10, y: 6, color: '#14b8a6' },
+            { x: 11, y: 4, color: '#5eead4' },
+            { x: 11, y: 5, color: '#14b8a6' },
+            { x: 12, y: 3, color: '#5eead4' },
+            { x: 12, y: 4, color: '#14b8a6' },
+            { x: 13, y: 2, color: '#a5f3fc' },
+            { x: 13, y: 3, color: '#14b8a6' },
+
+            // Edge / Shadows
+            { x: 5, y: 8, color: '#083344' },
+            { x: 6, y: 7, color: '#0e7490' },
+            { x: 7, y: 6, color: '#0e7490' },
+            { x: 8, y: 5, color: '#0e7490' },
+            { x: 9, y: 4, color: '#06b6d4' },
+            { x: 10, y: 3, color: '#06b6d4' },
+            { x: 11, y: 2, color: '#22d3ee' },
+            { x: 12, y: 1, color: '#67e8f9' },
+
+            // Blade Tip
+            { x: 14, y: 1, color: '#cffafe' },
+            { x: 13, y: 1, color: '#a5f3fc' }
+        ];
 
         window.onload = function() {
             setupDragAndDrop();
@@ -1018,151 +1208,294 @@
             loadProjectsFromStorage();
             updateProjectSelect();
             loadProjectInfo();
+            initPixelForge();
         };
 
-        function setupConfirmModal() {
-            const cancelBtn = document.getElementById('confirmModalCancel');
-            const okBtn = document.getElementById('confirmModalOk');
+        function setCharLimit(num) {
+            document.getElementById('batchCharLimit').value = num;
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                if (btn.textContent.replace(/\s+/g, '') === String(num)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            if (Object.keys(activeMissingKeysMap).length > 0) {
+                showBatchPrompt(activeMissingKeysMap);
+            }
+        }
+
+        // --- Custom Toast UI ---
+        function showToast(message, type = "info") {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
             
-            cancelBtn.onclick = closeConfirmModal;
-            okBtn.onclick = function() {
+            let iconSvg = '';
+            if (type === 'success') {
+                iconSvg = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+            } else if (type === 'error') {
+                iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>';
+            } else {
+                iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>';
+            }
+
+            toast.innerHTML = `${iconSvg} <span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // --- Safe In-App Confirmation Modal (No window.confirm) ---
+        function setupConfirmModal() {
+            const modal = document.getElementById('confirmModal');
+            const btnCancel = document.getElementById('confirmModalCancel');
+            const btnOk = document.getElementById('confirmModalOk');
+
+            btnCancel.onclick = () => { modal.style.display = 'none'; confirmActionCallback = null; };
+            btnOk.onclick = () => {
                 if (typeof confirmActionCallback === 'function') {
                     confirmActionCallback();
                 }
-                closeConfirmModal();
+                modal.style.display = 'none';
+                confirmActionCallback = null;
             };
         }
 
-        function showConfirmModal(title, text, callback) {
+        function openConfirmModal(title, text, callback) {
             document.getElementById('confirmModalTitle').textContent = title;
             document.getElementById('confirmModalText').textContent = text;
             confirmActionCallback = callback;
             document.getElementById('confirmModal').style.display = 'flex';
         }
 
-        function closeConfirmModal() {
-            document.getElementById('confirmModal').style.display = 'none';
-            confirmActionCallback = null;
-        }
+        function setupDragAndDrop() {
+            [
+                { id: 'dropzoneOrig', inputId: 'originalFile', type: 'original' },
+                { id: 'dropzoneOld', inputId: 'oldTranslationFile', type: 'old' }
+            ].forEach(cfg => {
+                const zone = document.getElementById(cfg.id);
+                const input = document.getElementById(cfg.inputId);
 
-        function setBatchLimit(limit) {
-            document.getElementById('batchCharLimit').value = limit;
-            document.querySelectorAll('.preset-pill').forEach(pill => {
-                pill.classList.toggle('active', pill.textContent.replace(/\s+/g, '') === String(limit));
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    zone.addEventListener(eventName, e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        zone.classList.add('dragover');
+                    }, false);
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    zone.addEventListener(eventName, e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        zone.classList.remove('dragover');
+                    }, false);
+                });
+
+                zone.addEventListener('drop', e => {
+                    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                        const file = e.dataTransfer.files[0];
+                        processFileSelection(cfg.type, file);
+                    }
+                });
+
+                input.addEventListener('change', e => {
+                    if (input.files && input.files[0]) {
+                        processFileSelection(cfg.type, input.files[0]);
+                    }
+                });
             });
-            onBatchLimitChange();
         }
 
-        function onBatchLimitChange() {
-            if (Object.keys(activeMissingKeysMap).length > 0) {
-                showBatchPrompt(activeMissingKeysMap, false);
+        function processFileSelection(type, file) {
+            if (!file.name.toLowerCase().endsWith('.json')) {
+                showToast("Будь ласка, оберіть файл з розширенням .json", "error");
+                return;
+            }
+
+            // Warning if user sets uk_ua.json into original slot
+            if (type === 'original' && file.name.toLowerCase().includes('uk_ua')) {
+                showToast("⚠️ Увага: ви завантажуєте uk_ua.json як оригінал! Тут має бути en_us.json.", "warning");
+            }
+
+            loadedFiles[type] = file;
+            salvagedObjects[type] = null;
+            updateFileDisplay(type, file);
+            showToast(`Файл "${file.name}" готовий до обробки!`, "success");
+        }
+
+        function updateFileDisplay(type, file) {
+            const isOrig = type === 'original';
+            const textElem = document.getElementById(isOrig ? 'dropzoneOrigText' : 'dropzoneOldText');
+            const nameElem = document.getElementById(isOrig ? 'dropzoneOrigName' : 'dropzoneOldName');
+
+            if (file) {
+                textElem.style.display = 'none';
+                nameElem.style.display = 'block';
+                nameElem.textContent = `✔ ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            } else {
+                textElem.style.display = 'block';
+                nameElem.style.display = 'none';
+                nameElem.textContent = '';
             }
         }
 
-        function createCharacterBatch(missingMap, maxLimit) {
-            const keys = Object.keys(missingMap);
-            if (keys.length === 0) return null;
+        function handleFileSelected(inputId, textId, nameId) {
+            const input = document.getElementById(inputId);
+            const type = inputId === 'originalFile' ? 'original' : 'old';
+            if (input.files && input.files[0]) {
+                processFileSelection(type, input.files[0]);
+            }
+        }
 
-            let currentBatchLines = [];
-            let currentChars = 0;
-            let includedKeysCount = 0;
+        function initPixelForge() {
+            const svg = document.getElementById('mosaicSvg');
+            if (!svg) return;
+            svg.innerHTML = '';
 
-            for (let key of keys) {
-                const line = `  ${JSON.stringify(key)}: ${JSON.stringify(missingMap[key])},`;
-                const addedLen = line.length + 1;
+            SWORD_PIXELS.forEach((pixel, idx) => {
+                const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                rect.setAttribute('x', pixel.x);
+                rect.setAttribute('y', pixel.y);
+                rect.setAttribute('width', 1);
+                rect.setAttribute('height', 1);
+                rect.setAttribute('id', `voxel-${idx}`);
+                rect.setAttribute('class', 'pixel-rect');
+                rect.setAttribute('fill', '#1a2234');
+                rect.setAttribute('stroke', '#0d1322');
+                rect.setAttribute('stroke-width', '0.08');
+                svg.appendChild(rect);
+            });
+            updatePixelForge(0, false);
+        }
 
-                if (includedKeysCount > 0 && (currentChars + addedLen) > maxLimit) {
-                    break;
+        function updatePixelForge(progressPct, isComplete) {
+            const totalPixels = SWORD_PIXELS.length;
+            const unlockedTarget = isComplete ? totalPixels : Math.min(totalPixels, Math.floor((progressPct / 100) * totalPixels));
+            const svg = document.getElementById('mosaicSvg');
+
+            SWORD_PIXELS.forEach((pixel, idx) => {
+                const rect = document.getElementById(`voxel-${idx}`);
+                if (!rect) return;
+
+                if (idx < unlockedTarget) {
+                    rect.setAttribute('fill', pixel.color);
+                    if (!rect.classList.contains('unlocked')) {
+                        rect.classList.add('unlocked');
+                    }
+                } else {
+                    rect.setAttribute('fill', '#1a2234');
+                    rect.classList.remove('unlocked');
                 }
+            });
 
-                currentBatchLines.push(line);
-                currentChars += addedLen;
-                includedKeysCount++;
+            document.getElementById('mosaicBlocksCount').textContent = `(${unlockedTarget}/${totalPixels})`;
+
+            if (isComplete || progressPct >= 100) {
+                svg.classList.add('enchanted');
+                document.getElementById('mosaicName').textContent = '✨ Зачарований Діамантовий Меч';
+            } else {
+                svg.classList.remove('enchanted');
+                document.getElementById('mosaicName').textContent = '🗡️ Діамантовий Меч';
             }
-
-            const rawLinesText = currentBatchLines.join('\n');
-            const totalKeys = keys.length;
-            const remainingAfter = totalKeys - includedKeysCount;
-            const estimatedBatches = Math.ceil(totalKeys / includedKeysCount);
-
-            return {
-                rawLinesText,
-                charsCount: currentChars,
-                keysCount: includedKeysCount,
-                totalMissing: totalKeys,
-                remainingAfter,
-                estimatedBatches
-            };
         }
 
-        function showBatchPrompt(missingMap, shouldScroll = true) {
-            activeMissingKeysMap = missingMap;
+        function updateRoundsTracker(totalChars, remainingChars, newlyTranslatedChars = 0) {
             const charLimit = parseInt(document.getElementById('batchCharLimit').value, 10) || 3500;
-            const batch = createCharacterBatch(missingMap, charLimit);
-
-            if (!batch) return;
-
-            document.getElementById('batchCurrentCountBadge').textContent = 
-                `Порція: ${batch.keysCount} рядків (${batch.charsCount.toLocaleString()} / ${charLimit.toLocaleString()} симв.)`;
-
-            const promptWithInstruction = `Переклади ці рядки українською мовою для Minecraft мода.\nНе видаляй і не змінюй ліві ключі. Збережи без змін змінні %s, %d, {0} та кольорові коди §.\nПоверни виключно у форматі пар "ключ": "значення":\n\n{\n${batch.rawLinesText}\n}`;
-
-            const statusMsg = `✂️ <strong>Вам треба ще перекласти це</strong> (залишилось ${batch.totalMissing} неперекладених ключів).<br>` +
-                              `<span style="color:#94a3b8; font-size:12px;">Сайт відібрав <strong>${batch.keysCount} повних рядків</strong> (${batch.charsCount} симв. з ліміту ${charLimit}). ` +
-                              `<span class="strict-batch-badge">✔ Жоден рядок не обрізано</span> Залишиться ще ~${batch.remainingAfter} рядків (~${batch.estimatedBatches} порцій).</span>`;
-
-            log(statusMsg, "log-warning", promptWithInstruction, batch.rawLinesText);
-            if (shouldScroll) {
-                document.getElementById('logArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            let avgCharsPerRound = charLimit;
+            if (completedRoundsHistory.length > 0) {
+                const sumChars = completedRoundsHistory.reduce((acc, r) => acc + (r.charsAdded || 0), 0);
+                avgCharsPerRound = Math.max(500, Math.round(sumChars / completedRoundsHistory.length));
             }
+
+            const remainingRounds = remainingChars > 0 ? Math.ceil(remainingChars / avgCharsPerRound) : 0;
+            totalEstimatedRounds = Math.max(1, currentRoundNumber + remainingRounds);
+
+            document.getElementById('currentRoundText').textContent = `Круг ${currentRoundNumber}`;
+            document.getElementById('estimatedRoundsText').textContent = `з ~${totalEstimatedRounds} запланованих`;
+
+            const statusElem = document.getElementById('roundStatusMessage');
+            if (remainingChars <= 0) {
+                statusElem.innerHTML = `🎉 <strong>Всі круги пройдено!</strong> Ви успішно викували повний переклад за ${currentRoundNumber} ітерацій.`;
+            } else if (currentRoundNumber === 0) {
+                statusElem.innerHTML = `Готово до старту! Надішліть першу порцію ШІ (орієнтовно знадобиться <strong>~${totalEstimatedRounds} кругів</strong>).`;
+            } else {
+                const speedTip = newlyTranslatedChars > 0 ? ` (+${newlyTranslatedChars.toLocaleString()} симв. на цьому крузі)` : '';
+                statusElem.innerHTML = `Ага! Ви зробили круг <strong>#${currentRoundNumber}</strong>${speedTip}. ` +
+                    `Залишилося перекласти ще <strong>~${remainingChars.toLocaleString()} симв.</strong> ` +
+                    `(приблизно <strong>~${remainingRounds} ${getRoundWordPlural(remainingRounds)}</strong>).`;
+            }
+
+            renderRoundsTimeline(currentRoundNumber, totalEstimatedRounds);
         }
 
-        function calculateTextChars(obj) {
-            let total = 0;
-            for (let k in obj) {
-                if (obj[k] !== undefined && obj[k] !== null) {
-                    total += String(obj[k]).length;
+        function getRoundWordPlural(num) {
+            const n = Math.abs(num) % 100;
+            const n1 = n % 10;
+            if (n > 10 && n < 20) return 'кругів';
+            if (n1 > 1 && n1 < 5) return 'круги';
+            if (n1 === 1) return 'круг';
+            return 'кругів';
+        }
+
+        function renderRoundsTimeline(current, total) {
+            const container = document.getElementById('roundsTimeline');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const maxVisiblePills = Math.min(total, 25);
+            for (let i = 1; i <= maxVisiblePills; i++) {
+                const pill = document.createElement('span');
+                if (i <= current) {
+                    pill.className = 'round-pill completed';
+                    pill.textContent = `Круг ${i} ✔`;
+                } else if (i === current + 1) {
+                    pill.className = 'round-pill current';
+                    pill.textContent = `Круг ${i} (Зараз)`;
+                } else {
+                    pill.className = 'round-pill';
+                    pill.textContent = `Круг ${i}`;
                 }
+                container.appendChild(pill);
             }
-            return total;
+            if (total > 25) {
+                const morePill = document.createElement('span');
+                morePill.className = 'round-pill';
+                morePill.textContent = `+ще ${total - 25}...`;
+                container.appendChild(morePill);
+            }
         }
 
-        function updateCircularDashboard(totalKeys, translatedKeys, totalTextChars, translatedTextChars, outdatedCount = 0) {
-            const dashboard = document.getElementById('progressDashboard');
-            dashboard.style.display = 'block';
+        function updateCircularDashboard(totalKeys, translatedKeys, totalChars, translatedChars, outdatedKeysCount) {
+            const keysPct = totalKeys > 0 ? (translatedKeys / totalKeys) * 100 : 0;
+            const charsPct = totalChars > 0 ? (translatedChars / totalChars) * 100 : 0;
 
-            const pct = totalKeys > 0 ? (translatedKeys / totalKeys) * 100 : 0;
-            const pctDisplay = pct % 1 === 0 ? pct.toFixed(0) : pct.toFixed(1);
+            const circle = document.getElementById('circleProgress');
+            const circumference = 301.59;
+            const offset = circumference - (keysPct / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
 
-            const circleCircumference = 326.73;
-            const offset = circleCircumference - (pct / 100) * circleCircumference;
-            const circleBar = document.getElementById('circleProgressBar');
-            if (circleBar) {
-                circleBar.style.strokeDashoffset = offset;
-            }
-
-            document.getElementById('circlePctText').textContent = `${pctDisplay}%`;
+            document.getElementById('circlePercentage').textContent = `${keysPct.toFixed(1)}%`;
             document.getElementById('statKeysValue').textContent = `${translatedKeys.toLocaleString()} / ${totalKeys.toLocaleString()}`;
-            document.getElementById('statKeysSub').textContent = `Готово ${pctDisplay}% усіх ключів`;
+            document.getElementById('statKeysSub').textContent = `${keysPct.toFixed(1)}% перекладено`;
 
-            const charsPct = totalTextChars > 0 ? ((translatedTextChars / totalTextChars) * 100).toFixed(1) : "0";
-            document.getElementById('statCharsValue').textContent = `${translatedTextChars.toLocaleString()} / ${totalTextChars.toLocaleString()}`;
-            document.getElementById('statCharsSub').textContent = `Символів: ${charsPct}% перекладено`;
+            document.getElementById('statCharsValue').textContent = `${translatedChars.toLocaleString()} / ${totalChars.toLocaleString()}`;
+            document.getElementById('statCharsSub').textContent = `${charsPct.toFixed(1)}% тексту`;
 
-            const remainingKeys = Math.max(0, totalKeys - translatedKeys);
-            const remainingChars = Math.max(0, totalTextChars - translatedTextChars);
-            document.getElementById('statRemainingValue').textContent = `${remainingKeys.toLocaleString()} ключів`;
-            document.getElementById('statRemainingSub').textContent = `${remainingChars.toLocaleString()} симв. залишилось`;
-            document.getElementById('statOutdatedValue').textContent = outdatedCount.toLocaleString();
-        }
+            const missingKeys = Math.max(0, totalKeys - translatedKeys);
+            const missingChars = Math.max(0, totalChars - translatedChars);
+            document.getElementById('statMissingValue').textContent = missingKeys.toLocaleString();
+            document.getElementById('statMissingCharsSub').textContent = `~${missingChars.toLocaleString()} симв.`;
+            document.getElementById('statOutdatedValue').textContent = outdatedKeysCount.toLocaleString();
 
-        function clearLog() {
-            const logArea = document.getElementById('logArea');
-            logArea.style.display = 'block';
-            document.getElementById('logMessages').innerHTML = '';
-            document.getElementById('downloadCopyGroup').style.display = 'none';
-            document.getElementById('progressDashboard').style.display = 'none';
-            logArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('logArea').style.display = 'block';
         }
 
         function loadProjectsFromStorage() {
@@ -1180,9 +1513,8 @@
         function updateProjectSelect() {
             const select = document.getElementById('projectSelect');
             const currentValue = select.value || "_fast_";
-            
             select.innerHTML = '<option value="_fast_">⚡ Швидкий сеанс (без збереження в пам\'ять)</option>';
-            
+
             for (let name in projects) {
                 let opt = document.createElement('option');
                 opt.value = name;
@@ -1210,12 +1542,12 @@
             showToast(`Проєкт "${name}" успішно створено!`, "success");
         }
 
-        function deleteCurrentProject() {
+        function promptDeleteProject() {
             if (currentProjectName === "_fast_" || !projects[currentProjectName]) return;
-            showConfirmModal(
+            openConfirmModal(
                 "Видалення проєкту",
-                `Ви дійсно бажаєте видалити проєкт "${currentProjectName}" разом із усіма збереженими ключами?`,
-                function() {
+                `Ви дійсно бажаєте видалити проєкт "${currentProjectName}" разом із усіма збереженими перекладами?`,
+                () => {
                     delete projects[currentProjectName];
                     saveProjectsToStorage();
                     currentProjectName = "_fast_";
@@ -1237,11 +1569,9 @@
                 badge.className = 'badge badge-warning';
                 downloadProjBtn.style.display = 'none';
                 deleteProjBtn.style.display = 'none';
-                accumulatedTranslations = {};
             } else if (currentProjectName && projects[currentProjectName]) {
-                accumulatedTranslations = { ...(projects[currentProjectName].translation || {}) };
-                const keysCount = Object.keys(accumulatedTranslations).length;
-                badge.textContent = `В базі: ${keysCount} ключів`;
+                const keysCount = Object.keys(projects[currentProjectName].translation || {}).length;
+                badge.textContent = `В базі: ${keysCount} рядків`;
                 badge.className = 'badge badge-success';
                 downloadProjBtn.style.display = keysCount > 0 ? 'inline-flex' : 'none';
                 deleteProjBtn.style.display = 'inline-flex';
@@ -1251,230 +1581,252 @@
         function downloadSavedProject() {
             if (currentProjectName === "_fast_" || !projects[currentProjectName]) return;
             const data = projects[currentProjectName].translation;
-            if (!data || Object.keys(data).length === 0) return showToast("Цей проєкт поки що порожній!", "warning");
-
-            const jsonString = JSON.stringify(data, null, 2);
-            triggerDownload(jsonString, `${currentProjectName}_uk_ua.json`);
+            if (Object.keys(data).length === 0) return showToast("Цей проєкт ще порожній!", "warning");
+            triggerDownload(JSON.stringify(data, null, 2), `${currentProjectName}_uk_ua.json`);
         }
 
-        function log(message, type = "log-success", codeSnippet = "", rawLinesSnippet = "") {
-            const logMessages = document.getElementById('logMessages');
-            const li = document.createElement('li');
-            li.className = `log-item ${type}`;
+        function smartParseJSON(rawText, fileName, slotType) {
+            if (!rawText || !rawText.trim()) {
+                return { success: false, errorMsg: `Файл "${fileName}" порожній!`, line: 1, col: 1, snippet: "" };
+            }
 
-            const titleDiv = document.createElement('div');
-            titleDiv.className = "log-item-title";
-            titleDiv.innerHTML = `<span>${message}</span>`;
-            li.appendChild(titleDiv);
+            let text = rawText;
+            // 1. Очищення UTF-8 BOM та невидимих спецсимволів
+            if (text.charCodeAt(0) === 0xFEFF) text = text.substring(1);
+            text = text.replace(/[\u200B\u200C\u200D\uFEFF]/g, '');
 
-            if (codeSnippet) {
-                const pre = document.createElement('div');
-                pre.className = "code-box";
-                pre.textContent = codeSnippet;
-                li.appendChild(pre);
+            // Спроба 1: Прямий строгий парсинг
+            try {
+                const data = JSON.parse(text);
+                return { success: true, data, repaired: false };
+            } catch (strictErr) {
+                // Прямий парсинг не вдався - переходимо до очищення
+            }
 
-                const btnsWrap = document.createElement('div');
-                btnsWrap.style.display = 'flex';
-                btnsWrap.style.gap = '8px';
-                btnsWrap.style.flexWrap = 'wrap';
+            // Спроба 2: Автоматичне виправлення типових огріхів без спотворення українських лапок (« »)
+            let repaired = text;
 
-                const copyBtn = document.createElement('button');
-                copyBtn.className = "copy-snippet-btn";
-                copyBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Скопіювати порцію для ШІ (з промптом)`;
-                copyBtn.onclick = function() {
-                    executeCopy(codeSnippet);
-                    copyBtn.innerHTML = `✔ Скопійовано!`;
-                    showToast("Порцію з інструкцією скопійовано!", "success");
-                    setTimeout(() => {
-                        copyBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Скопіювати порцію для ШІ (з промптом)`;
-                    }, 2200);
+            // Прибираємо markdown-розмітку від ШІ (```json ... ```)
+            repaired = repaired.replace(/^\s*```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '');
+
+            // Видаляємо однорядкові (//) та багаторядкові (/* */) коментарі
+            repaired = repaired.replace(/\/\*[\s\S]*?\*\//g, '');
+            repaired = repaired.replace(/(^|[^\\])\/\/.*$/gm, '$1');
+
+            // Прибираємо зайві коми перед закриваючими дужками } або ]
+            repaired = repaired.replace(/,(\s*[}\]])/g, '$1');
+
+            // Якщо файл обірвано без закриваючої дужки, дописуємо її
+            const trimmed = repaired.trim();
+            if (trimmed.startsWith('{') && !trimmed.endsWith('}')) {
+                repaired = trimmed + '\n}';
+            }
+
+            try {
+                const data = JSON.parse(repaired);
+                return { success: true, data, repaired: true };
+            } catch (repairErr) {
+                // Якщо помилка лишилась, запускаємо миттєвий автоматичний порятунок ключів
+            }
+
+            const salvage = salvageKeyValues(text);
+            if (salvage.count > 0) {
+                return {
+                    success: true,
+                    data: salvage.data,
+                    repaired: true,
+                    autoSalvaged: true,
+                    salvageCount: salvage.count
                 };
-                btnsWrap.appendChild(copyBtn);
+            }
 
-                if (rawLinesSnippet) {
-                    const copyRawBtn = document.createElement('button');
-                    copyRawBtn.className = "copy-snippet-btn";
-                    copyRawBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Тільки рядки від лапок до коми`;
-                    copyRawBtn.onclick = function() {
-                        executeCopy(rawLinesSnippet);
-                        copyRawBtn.innerHTML = `✔ Рядки скопійовано!`;
-                        showToast("Скопійовано тільки рядки без промпту", "info");
-                        setTimeout(() => {
-                            copyRawBtn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Тільки рядки від лапок до коми`;
-                        }, 2200);
-                    };
-                    btnsWrap.appendChild(copyRawBtn);
+            const location = locateJsonError(text, repairErr || new Error("Невідома помилка"));
+            return {
+                success: false,
+                errorMsg: `У файлі "${fileName}" виявлено помилку (рядок ${location.line}, стовпчик ${location.col}).`,
+                line: location.line,
+                col: location.col,
+                snippet: location.snippet,
+                explanation: "Не вдалося розпізнати синтаксис JSON.",
+                salvageCount: 0,
+                salvagedData: {},
+                fileName,
+                slotType
+            };
+        }
+
+        function locateJsonError(text, err) {
+            let line = 1;
+            let col = 1;
+            let pos = -1;
+
+            const posMatch = err.message.match(/position\s+(\d+)/i) || err.message.match(/char\s+(\d+)/i);
+            if (posMatch) {
+                pos = parseInt(posMatch[1], 10);
+            }
+
+            const lineColMatch = err.message.match(/line\s+(\d+)\s+column\s+(\d+)/i);
+            if (lineColMatch) {
+                line = parseInt(lineColMatch[1], 10);
+                col = parseInt(lineColMatch[2], 10);
+            } else if (pos !== -1 && pos <= text.length) {
+                const sub = text.substring(0, pos);
+                const lines = sub.split('\n');
+                line = lines.length;
+                col = lines[lines.length - 1].length + 1;
+            }
+
+            const lines = text.split('\n');
+            const startLine = Math.max(0, line - 3);
+            const endLine = Math.min(lines.length, line + 2);
+            const snippetLines = [];
+
+            for (let i = startLine; i < endLine; i++) {
+                const currentLineNum = i + 1;
+                const padNum = currentLineNum.toString().padStart(4, ' ');
+                const isErrorLine = (currentLineNum === line);
+                const lineContent = lines[i] || "";
+                
+                snippetLines.push(`${isErrorLine ? '❌' : '  '} ${padNum} | ${lineContent}`);
+                if (isErrorLine) {
+                    const arrowPad = ' '.repeat(Math.max(0, col + 7));
+                    snippetLines.push(`${arrowPad}▲── ПОМИЛКА ТУТ`);
                 }
-
-                li.appendChild(btnsWrap);
             }
 
-            logMessages.appendChild(li);
+            return { line, col, snippet: snippetLines.join('\n') };
         }
 
-        function setupDragAndDrop() {
-            ['dropzoneOrig', 'dropzoneOld'].forEach(zoneId => {
-                const zone = document.getElementById(zoneId);
-                if (!zone) return;
-                const fileType = zoneId === 'dropzoneOrig' ? 'original' : 'old';
-                const input = zone.querySelector('input[type="file"]');
-
-                ['dragenter', 'dragover'].forEach(eventName => {
-                    zone.addEventListener(eventName, e => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        zone.classList.add('dragover');
-                    }, false);
-                });
-
-                ['dragleave', 'dragend'].forEach(eventName => {
-                    zone.addEventListener(eventName, e => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        zone.classList.remove('dragover');
-                    }, false);
-                });
-
-                zone.addEventListener('drop', e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    zone.classList.remove('dragover');
-
-                    const files = e.dataTransfer && e.dataTransfer.files;
-                    if (files && files.length > 0) {
-                        const file = files[0];
-                        if (!file.name.toLowerCase().endsWith('.json')) {
-                            showToast("Оберіть файл з розширенням .json", "error");
-                            return;
-                        }
-                        loadedFiles[fileType] = file;
-                        try {
-                            const dt = new DataTransfer();
-                            dt.items.add(file);
-                            input.files = dt.files;
-                        } catch (err) {}
-                        updateFileDisplay(fileType, file);
-                        showToast(`Файл "${file.name}" завантажено`, "success");
-                    }
-                }, false);
-            });
-
-            window.addEventListener('dragover', e => e.preventDefault(), false);
-            window.addEventListener('drop', e => e.preventDefault(), false);
-        }
-
-        function handleFileSelected(inputId) {
-            const input = document.getElementById(inputId);
-            const fileType = inputId === 'originalFile' ? 'original' : 'old';
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                if (!file.name.toLowerCase().endsWith('.json')) {
-                    showToast("Оберіть файл з розширенням .json", "error");
-                    input.value = "";
-                    loadedFiles[fileType] = null;
-                    updateFileDisplay(fileType, null);
-                    return;
+        function salvageKeyValues(text) {
+            const data = {};
+            let count = 0;
+            // Безпечний регулярний вираз, що коректно зберігає українські лапки « » всередині значень
+            const regex = /"([^"\\]*(?:\\.[^"\\]*)*)"\s*:\s*"([^"\\]*(?:\\.[^"\\]*)*)"/g;
+            let match;
+            while ((match = regex.exec(text)) !== null) {
+                const key = match[1];
+                const rawVal = match[2];
+                try {
+                    data[key] = JSON.parse(`"${rawVal}"`);
+                } catch (e) {
+                    data[key] = rawVal.replace(/\\"/g, '"');
                 }
-                loadedFiles[fileType] = file;
-                updateFileDisplay(fileType, file);
-                showToast(`Файл "${file.name}" завантажено`, "success");
+                count++;
             }
+            return { data, count };
         }
 
-        function updateFileDisplay(fileType, file) {
-            const textId = fileType === 'original' ? 'dropzoneOrigText' : 'dropzoneOldText';
-            const nameId = fileType === 'original' ? 'dropzoneOrigName' : 'dropzoneOldName';
-            const textElem = document.getElementById(textId);
-            const nameElem = document.getElementById(nameId);
-            if (!textElem || !nameElem) return;
-
-            if (file) {
-                textElem.style.display = 'none';
-                nameElem.style.display = 'block';
-                const sizeKb = (file.size / 1024).toFixed(1);
-                nameElem.textContent = `✔ ${file.name} (${sizeKb} KB)`;
-            } else {
-                textElem.style.display = 'block';
-                nameElem.style.display = 'none';
-                nameElem.textContent = '';
-            }
-        }
-
-        function clearInputArea() {
-            document.getElementById('translatedText').value = '';
-            showToast("Поле вводу очищено для наступного фрагменту", "info");
-        }
-
-        function resetForm() {
-            document.getElementById('originalFile').value = '';
-            document.getElementById('oldTranslationFile').value = '';
-            document.getElementById('translatedText').value = '';
-
-            loadedFiles.original = null;
-            loadedFiles.old = null;
-
-            updateFileDisplay('original', null);
-            updateFileDisplay('old', null);
-
-            accumulatedTranslations = {};
-            activeMissingKeysMap = {};
-            document.getElementById('logArea').style.display = 'none';
-            finalJsonString = "";
-            showToast("Форму та файли очищено!", "info");
-        }
-
-        function readFileAsJSON(file) {
+        function readFileAsJSON(file, slotType = "old") {
             return new Promise((resolve, reject) => {
-                if (!file) return reject(new Error("Файл не вибрано"));
                 const reader = new FileReader();
                 reader.onload = e => {
-                    try {
-                        let text = e.target.result;
-                        text = text.replace(/^\uFEFF/, '').trim();
-
-                        try {
-                            const parsed = JSON.parse(text);
-                            resolve(parsed);
-                        } catch (parseErr) {
-                            const sanitized = text
-                                .replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/gm, '$1')
-                                .replace(/,(\s*[}\]])/g, '$1');
-                            const parsed = JSON.parse(sanitized);
-                            resolve(parsed);
+                    const rawText = e.target.result;
+                    const res = smartParseJSON(rawText, file.name, slotType);
+                    if (res.success) {
+                        if (res.autoSalvaged) {
+                            showToast(`⚡ У файлі "${file.name}" врятовано та успішно завантажено всі ${res.salvageCount} ключів!`, "warning");
+                        } else if (res.repaired) {
+                            showToast(`💡 Файл "${file.name}" містив синтаксичні огріхи (коми/коментарі), які було виправлено!`, "warning");
                         }
-                    } catch (err) {
-                        reject(new Error(`Файл "${file.name}" має помилку в синтаксисі JSON: ${err.message}`));
+                        resolve(res.data);
+                    } else {
+                        const err = new Error(res.errorMsg);
+                        err.diagnostic = res;
+                        reject(err);
                     }
                 };
-                reader.onerror = () => reject(new Error(`Помилка зчитування файлу "${file.name}"`));
+                reader.onerror = () => reject(new Error(`Помилка читання файлу "${file.name}".`));
                 reader.readAsText(file, "UTF-8");
             });
         }
 
         async function getFilesData() {
-            const origInput = document.getElementById('originalFile');
-            const origFile = loadedFiles.original || (origInput.files && origInput.files[0]);
+            const originalFileInput = document.getElementById('originalFile');
+            const oldTranslationFileInput = document.getElementById('oldTranslationFile');
 
-            if (!origFile) {
-                throw new Error("Будь ласка, завантажте файл оригіналу (en_us.json) у Крок 1");
+            // Надійна перевірка як збереженого об'єкта, так і нативного інпуту
+            const originalFile = loadedFiles.original || (originalFileInput && originalFileInput.files && originalFileInput.files[0]);
+            const oldFile = loadedFiles.old || (oldTranslationFileInput && oldTranslationFileInput.files && oldTranslationFileInput.files[0]);
+
+            if (!originalFile) {
+                throw new Error("Будь ласка, завантажте оригінальний файл (en_us.json) у Крок 1!");
             }
 
-            const originalObj = await readFileAsJSON(origFile);
+            let originalObj;
+            if (salvagedObjects.original) {
+                originalObj = salvagedObjects.original;
+            } else {
+                originalObj = await readFileAsJSON(originalFile, 'original');
+            }
+
             let oldTranslationObj = {};
 
             if (currentProjectName !== "_fast_" && projects[currentProjectName]) {
                 oldTranslationObj = { ...(projects[currentProjectName].translation || {}) };
             }
 
-            const oldInput = document.getElementById('oldTranslationFile');
-            const oldFile = loadedFiles.old || (oldInput.files && oldInput.files[0]);
-            if (oldFile) {
-                const uploadedOld = await readFileAsJSON(oldFile);
+            if (salvagedObjects.old) {
+                oldTranslationObj = { ...oldTranslationObj, ...salvagedObjects.old };
+            } else if (oldFile) {
+                const uploadedOld = await readFileAsJSON(oldFile, 'old');
                 oldTranslationObj = { ...oldTranslationObj, ...uploadedOld };
             }
 
-            accumulatedTranslations = { ...oldTranslationObj, ...accumulatedTranslations };
-            return { originalObj, oldTranslationObj: accumulatedTranslations };
+            return { originalObj, oldTranslationObj };
+        }
+
+        function showJsonDiagnosticCard(diag) {
+            const logContainer = document.getElementById('logMessages');
+            const li = document.createElement('li');
+            li.className = 'log-item log-error';
+            li.style.borderLeftColor = 'var(--danger)';
+
+            const slotLabel = diag.slotType === 'original' ? 'Крок 1 (Оригінал)' : 'Крок 2 (Старий переклад)';
+            const uniqueId = `salvageBtn-${Date.now()}`;
+
+            let salvageHtml = '';
+            if (diag.salvageCount > 0) {
+                salvageHtml = `
+                    <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                        <div style="font-size: 13px; color: #cbd5e1;">
+                            💡 Ми виявили <strong>${diag.salvageCount}</strong> дійсних ключів перекладу. Ви можете врятувати їх в один клік і продовжити роботу!
+                        </div>
+                        <button type="button" class="btn-warning" id="${uniqueId}" style="padding: 8px 14px; font-size: 13px;">
+                            ⚡ Врятувати ${diag.salvageCount} ключів і продовжити
+                        </button>
+                    </div>
+                `;
+            }
+
+            li.innerHTML = `
+                <div class="log-item-title" style="color: #f87171; font-size: 14.5px;">
+                    <span>❌ Синтаксична помилка у файлі "${escapeHTML(diag.fileName)}" (${slotLabel})</span>
+                    <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4);">
+                        Рядок ${diag.line}, стовпчик ${diag.col}
+                    </span>
+                </div>
+                <div style="margin-top: 8px; color: #cbd5e1; font-size: 13px; line-height: 1.5;">
+                    <strong>Причина:</strong> ${escapeHTML(diag.explanation)}
+                </div>
+                ${diag.snippet ? `
+                    <div style="margin-top: 10px; font-size: 11.5px; color: #94a3b8; font-weight: 600;">Місце збою у файлі:</div>
+                    <div class="code-box" style="color: #fca5a5; background: #070913; border-color: rgba(239, 68, 68, 0.3); font-size: 12px; max-height: 180px;">${escapeHTML(diag.snippet)}</div>
+                ` : ''}
+                ${salvageHtml}
+            `;
+
+            logContainer.insertBefore(li, logContainer.firstChild);
+
+            if (diag.salvageCount > 0) {
+                const btn = document.getElementById(uniqueId);
+                if (btn) {
+                    btn.onclick = () => {
+                        salvagedObjects[diag.slotType] = diag.salvagedData;
+                        showToast(`Успішно врятовано ${diag.salvageCount} ключів! Повторюємо аналіз...`, "success");
+                        analyzeJSONs();
+                    };
+                }
+            }
         }
 
         async function analyzeJSONs() {
@@ -1483,54 +1835,179 @@
                 const { originalObj, oldTranslationObj } = await getFilesData();
 
                 let missingKeys = [];
-                let missingJsonForBot = {};
+                let missingMap = {};
                 let outdatedKeys = [];
-                let translatedCount = 0;
 
-                const origKeys = Object.keys(originalObj);
-                const totalKeys = origKeys.length;
+                let totalKeys = 0;
+                let translatedKeys = 0;
+                let totalChars = 0;
+                let translatedChars = 0;
 
-                let totalTextChars = 0;
-                let translatedTextChars = 0;
-
+                // Аналіз застарілих ключів у старій локалізації
                 for (let key in oldTranslationObj) {
                     if (!Object.prototype.hasOwnProperty.call(originalObj, key)) {
                         outdatedKeys.push(key);
                     }
                 }
 
-                for (let key of origKeys) {
-                    const charLen = String(originalObj[key] || "").length;
-                    totalTextChars += charLen;
+                // Аналіз оригінальних ключів
+                for (let key in originalObj) {
+                    totalKeys++;
+                    const origVal = String(originalObj[key] || "");
+                    totalChars += origVal.length;
 
                     if (Object.prototype.hasOwnProperty.call(oldTranslationObj, key)) {
-                        translatedCount++;
-                        translatedTextChars += charLen;
+                        const oldVal = String(oldTranslationObj[key] || "");
+                        // Вважаємо перекладеним тільки якщо значення відрізняється від оригіналу або є чисто технічним
+                        if (oldVal !== origVal || /^[0-9\s.,:%_{}§+\-*\/\\#@!?()]+$/.test(origVal)) {
+                            translatedKeys++;
+                            translatedChars += origVal.length;
+                        } else {
+                            missingKeys.push(key);
+                            missingMap[key] = originalObj[key];
+                        }
                     } else {
                         missingKeys.push(key);
-                        missingJsonForBot[key] = originalObj[key];
+                        missingMap[key] = originalObj[key];
                     }
                 }
 
-                updateCircularDashboard(totalKeys, translatedCount, totalTextChars, translatedTextChars, outdatedKeys.length);
+                activeMissingKeysMap = missingMap;
+                const remainingChars = Math.max(0, totalChars - translatedChars);
+                const keysPct = totalKeys > 0 ? (translatedKeys / totalKeys) * 100 : 0;
+
+                updateCircularDashboard(totalKeys, translatedKeys, totalChars, translatedChars, outdatedKeys.length);
+                updatePixelForge(keysPct, missingKeys.length === 0);
+                updateRoundsTracker(totalChars, remainingChars, 0);
 
                 if (outdatedKeys.length > 0) {
-                    log(`⚠️ Застарілих ключів у старій локалізації: ${outdatedKeys.length}. Вони відсутні в оригіналі та будуть відсіяні.`, "log-removed", outdatedKeys.slice(0, 100).join('\n') + (outdatedKeys.length > 100 ? `\n...ще ${outdatedKeys.length - 100} ключів` : ''));
+                    log(`⚠️ Знайдено застарілих ключів у старій локалізації: ${outdatedKeys.length}. Вони відсутні в en_us.json та будуть проігноровані.`, "log-removed", outdatedKeys.slice(0, 100).join('\n') + (outdatedKeys.length > 100 ? `\n...ще ${outdatedKeys.length - 100} ключів` : ''));
                 } else {
-                    log(`✅ Непотрібних або застарілих ключів не виявлено.`, "log-success");
+                    log(`✅ Старі ключі повністю актуальні.`, "log-success");
                 }
 
                 if (missingKeys.length > 0) {
-                    showBatchPrompt(missingJsonForBot);
+                    showBatchPrompt(missingMap);
+                    showToast(`Знайдено ${missingKeys.length} неперекладених рядків. Першу порцію сформовано!`, "info");
                 } else {
-                    activeMissingKeysMap = {};
-                    log(`🎉 Чудово! Всі ${totalKeys} ключів вже мають переклад. Можна збирати фінальний файл!`, "log-success");
+                    log(`🎉 Чудово! Всі ${totalKeys} ключів уже мають переклад. Можна збирати фінальний файл!`, "log-success");
+                    updatePixelForge(100, true);
+                    showToast("Усі рядки перекладено на 100%!", "success");
                 }
 
             } catch (error) {
-                log(`Помилка: ${error.message}`, "log-error");
+                if (error.diagnostic) {
+                    showJsonDiagnosticCard(error.diagnostic);
+                } else {
+                    log(`Помилка аналізу: ${error.message}`, "log-error");
+                }
                 showToast(error.message, "error");
             }
+        }
+
+        function createCharacterBatch(itemsMap, maxChars) {
+            const keys = Object.keys(itemsMap);
+            const batchObj = {};
+            let batchLines = [];
+            let totalBatchChars = 0;
+            let count = 0;
+
+            for (let i = 0; i < keys.length; i++) {
+                const k = keys[i];
+                const val = itemsMap[k];
+                // Форматуємо як повний неподільний рядок JSON: "key": "value",
+                const line = `  ${JSON.stringify(k)}: ${JSON.stringify(val)},`;
+                const lineLen = line.length + 1;
+
+                // Якщо додавання наступного рядка перевищує ліміт — зупиняємось, не обрізаючи рядок
+                if (totalBatchChars + lineLen > maxChars && count > 0) {
+                    break;
+                }
+
+                batchObj[k] = val;
+                batchLines.push(line);
+                totalBatchChars += lineLen;
+                count++;
+            }
+
+            return {
+                batchObj,
+                batchLinesText: batchLines.join('\n'),
+                count,
+                totalBatchChars,
+                remainingCount: keys.length - count
+            };
+        }
+
+        function showBatchPrompt(itemsMap) {
+            const charLimitInput = document.getElementById('batchCharLimit');
+            const limit = parseInt(charLimitInput.value, 10) || 3500;
+            const batch = createCharacterBatch(itemsMap, limit);
+
+            if (batch.count === 0) return;
+
+            const logMessages = document.getElementById('logMessages');
+            const existingBatchPanel = document.getElementById('activeBatchCard');
+            if (existingBatchPanel) {
+                existingBatchPanel.remove();
+            }
+
+            const promptHeader = `Переклади ці рядки українською мовою для гри Minecraft. Збережи назви ключів, змінні %s, %d, {0}, {1} та кольорові коди §. Поверни у форматі JSON ("ключ": "переклад",):\n\n`;
+            const fullPromptText = promptHeader + '{\n' + batch.batchLinesText.replace(/,$/, '') + '\n}';
+            const rawLinesOnly = batch.batchLinesText;
+
+            const cardLi = document.createElement('li');
+            cardLi.className = 'log-item log-warning';
+            cardLi.id = 'activeBatchCard';
+            cardLi.style.borderLeftColor = 'var(--cyan)';
+
+            cardLi.innerHTML = `
+                <div class="batch-output-header">
+                    <div style="font-weight: 700; color: #38bdf8; font-size: 14.5px; display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" style="fill:#38bdf8; width: 18px; height: 18px;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                        <span>Порція для ШІ: круг #${currentRoundNumber + 1}</span>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <span class="batch-badge">${batch.count} рядків</span>
+                        <span class="batch-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">${batch.totalBatchChars.toLocaleString()} / ${limit.toLocaleString()} симв.</span>
+                        <span class="badge badge-success">✔ Жоден рядок не обрізано</span>
+                    </div>
+                </div>
+                <div style="font-size: 13px; color: #cbd5e1; margin-bottom: 10px; line-height: 1.4;">
+                    Скопіюйте порцію нижче, надішліть її ШІ, отримайте відповідь і вставте в поле <strong>Крок 3</strong>:
+                </div>
+                <div class="code-box" id="batchCodeView">${escapeHTML(batch.batchLinesText)}</div>
+                <div class="batch-btn-row">
+                    <button type="button" class="btn-copy-action" id="btnCopyPrompt" style="background: linear-gradient(135deg, #0284c7, #0ea5e9); color: white; border: none;">
+                        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                        Скопіювати для ШІ (з промптом)
+                    </button>
+                    <button type="button" class="btn-copy-action" id="btnCopyRaw">
+                        <svg viewBox="0 0 24 24"><path d="M19 2h-14c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-16c0-1.1-.9-2-2-2zm-2 14h-10v-2h10v2zm0-4h-10v-2h10v2zm0-4h-10v-2h10v2z"/></svg>
+                        Тільки рядки від лапок до коми
+                    </button>
+                </div>
+            `;
+
+            logMessages.insertBefore(cardLi, logMessages.firstChild);
+
+            document.getElementById('btnCopyPrompt').onclick = function() {
+                executeCopy(fullPromptText);
+                this.innerHTML = `✔ Скопійовано з промптом!`;
+                showToast(`Порцію для ШІ (${batch.totalBatchChars} симв.) скопійовано!`, "success");
+                setTimeout(() => {
+                    this.innerHTML = `<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Скопіювати для ШІ (з промптом)`;
+                }, 2000);
+            };
+
+            document.getElementById('btnCopyRaw').onclick = function() {
+                executeCopy(rawLinesOnly);
+                this.innerHTML = `✔ Рядки скопійовано!`;
+                showToast(`Рядки без промпту скопійовано в буфер!`, "success");
+                setTimeout(() => {
+                    this.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 2h-14c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-16c0-1.1-.9-2-2-2zm-2 14h-10v-2h10v2zm0-4h-10v-2h10v2zm0-4h-10v-2h10v2z"/></svg> Тільки рядки від лапок до коми`;
+                }, 2000);
+            };
         }
 
         async function processTranslation() {
@@ -1542,18 +2019,18 @@
                 const { originalObj, oldTranslationObj } = await getFilesData();
                 const newBotObj = {};
 
+                // Attempt 1: Try strict JSON object
                 let parsedDirectly = false;
                 try {
                     const trimmed = translatedText.trim();
                     if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
                         const parsed = JSON.parse(trimmed);
-                        for (let k in parsed) {
-                            newBotObj[k] = parsed[k];
-                        }
+                        for (let k in parsed) newBotObj[k] = parsed[k];
                         parsedDirectly = true;
                     }
                 } catch (e) {}
 
+                // Attempt 2: Regex scanner for "key": "value" pairs
                 if (!parsedDirectly && translatedText.trim()) {
                     const regex = /"([^"]+)"\s*:\s*"((?:[^"\\]|\\.)*)"/g;
                     let match;
@@ -1569,10 +2046,22 @@
                 }
 
                 const botKeysCount = Object.keys(newBotObj).length;
+                let newlyAddedChars = 0;
+
                 if (botKeysCount > 0) {
+                    for (let k in newBotObj) {
+                        newlyAddedChars += String(newBotObj[k] || "").length;
+                    }
                     Object.assign(accumulatedTranslations, newBotObj);
-                    log(`🧩 Оброблено фрагмент: успішно додано ${botKeysCount} перекладів у загальну базу.`, "log-info");
-                    showToast(`+${botKeysCount} ключів успішно додано!`, "success");
+                    currentRoundNumber++;
+                    completedRoundsHistory.push({
+                        round: currentRoundNumber,
+                        keysAdded: botKeysCount,
+                        charsAdded: newlyAddedChars
+                    });
+
+                    log(`🧩 Оброблено круг #${currentRoundNumber}: успішно додано +${botKeysCount} перекладів (${newlyAddedChars} симв.) у загальну базу.`, "log-info");
+                    showToast(`Круг #${currentRoundNumber} успішно завершено! (+${botKeysCount} ключів)`, "success");
                 } else if (translatedText.trim() !== "") {
                     log(`⚠️ Не вдалося розпізнати пари "ключ": "значення" у вставленому тексті. Перевірте лапки.`, "log-warning");
                 }
@@ -1587,7 +2076,8 @@
                 let translatedTextChars = 0;
 
                 for (let key in originalObj) {
-                    const charLen = String(originalObj[key] || "").length;
+                    const origVal = String(originalObj[key] || "");
+                    const charLen = origVal.length;
                     totalTextChars += charLen;
 
                     if (Object.prototype.hasOwnProperty.call(accumulatedTranslations, key)) {
@@ -1595,9 +2085,16 @@
                         fromBotCount++;
                         translatedTextChars += charLen;
                     } else if (Object.prototype.hasOwnProperty.call(oldTranslationObj, key)) {
+                        const oldVal = String(oldTranslationObj[key] || "");
                         finalObj[key] = oldTranslationObj[key];
-                        fromOldCount++;
-                        translatedTextChars += charLen;
+                        
+                        if (oldVal !== origVal || /^[0-9\s.,:%_{}§+\-*\/\\#@!?()]+$/.test(origVal)) {
+                            fromOldCount++;
+                            translatedTextChars += charLen;
+                        } else {
+                            remainingToTranslate[key] = originalObj[key];
+                            stillMissingCount++;
+                        }
                     } else {
                         finalObj[key] = originalObj[key];
                         remainingToTranslate[key] = originalObj[key];
@@ -1607,8 +2104,12 @@
 
                 const totalKeys = Object.keys(originalObj).length;
                 const translatedTotal = totalKeys - stillMissingCount;
+                const overallPct = totalKeys > 0 ? (translatedTotal / totalKeys) * 100 : 0;
+                const remainingChars = Math.max(0, totalTextChars - translatedTextChars);
 
                 updateCircularDashboard(totalKeys, translatedTotal, totalTextChars, translatedTextChars, 0);
+                updatePixelForge(overallPct, stillMissingCount === 0);
+                updateRoundsTracker(totalTextChars, remainingChars, newlyAddedChars);
 
                 if (stillMissingCount > 0) {
                     showBatchPrompt(remainingToTranslate);
@@ -1616,25 +2117,29 @@
                     showToast(`Залишилось ${stillMissingCount} рядків. Наступну порцію сформовано!`, "warning");
                 } else {
                     activeMissingKeysMap = {};
-                    document.getElementById('batchCurrentCountBadge').textContent = 'Всі рядки перекладено (100%)';
                     log(`🎉 Вітаємо! Локалізацію повністю завершено (100%). Всі ${totalKeys} ключів перекладено!`, "log-success");
-                    showToast("Переклад завершено на 100%!", "success");
+                    showToast("Переклад завершено на 100%! Меч викувано!", "success");
                 }
 
+                // Save to active project
                 if (currentProjectName !== "_fast_") {
-                    projects[currentProjectName].translation = accumulatedTranslations;
+                    projects[currentProjectName].translation = finalObj;
                     saveProjectsToStorage();
                     updateProjectSelect();
                     document.getElementById('projectSelect').value = currentProjectName;
                     loadProjectInfo();
-                    log(`💾 Стан проєкту "${currentProjectName}" збережено в пам'ять.`, "log-success");
+                    log(`💾 Зміни збережено в проєкт "${currentProjectName}".`, "log-success");
                 }
 
                 finalJsonString = JSON.stringify(finalObj, null, 2);
                 document.getElementById('downloadCopyGroup').style.display = 'flex';
 
             } catch (error) {
-                log(`Помилка: ${error.message}`, "log-error");
+                if (error.diagnostic) {
+                    showJsonDiagnosticCard(error.diagnostic);
+                } else {
+                    log(`Помилка збірки: ${error.message}`, "log-error");
+                }
                 showToast(error.message, "error");
             }
         }
@@ -1664,12 +2169,13 @@
             tempArea.value = text;
             tempArea.style.position = 'fixed';
             tempArea.style.left = '-9999px';
+            tempArea.style.top = '-9999px';
             document.body.appendChild(tempArea);
             tempArea.select();
             try {
                 document.execCommand('copy');
             } catch (err) {
-                console.error("Помилка копіювання:", err);
+                console.error("Помилка execCommand copy:", err);
             }
             document.body.removeChild(tempArea);
         }
@@ -1677,41 +2183,74 @@
         function copyFinalJSON() {
             if (!finalJsonString) return;
             executeCopy(finalJsonString);
-            const copyBtn = document.getElementById('copyBtn');
-            const originalHtml = copyBtn.innerHTML;
-            copyBtn.innerHTML = '✔ Скопійовано в буфер!';
-            showToast("JSON скопійовано в буфер обміну!", "success");
-            setTimeout(() => { copyBtn.innerHTML = originalHtml; }, 2200);
+            const copyBtn = document.getElementById('copyFinalBtn');
+            const origHtml = copyBtn.innerHTML;
+            copyBtn.innerHTML = '✔ Скопійовано!';
+            showToast("Підсумковий JSON скопійовано в буфер обміну!", "success");
+            setTimeout(() => { copyBtn.innerHTML = origHtml; }, 2200);
+        }
+
+        function clearLog() {
+            const logArea = document.getElementById('logArea');
+            logArea.style.display = 'block';
+            document.getElementById('logMessages').innerHTML = '';
+            document.getElementById('downloadCopyGroup').style.display = 'none';
+        }
+
+        function log(message, type = "log-success", codeSnippet = "") {
+            const logMessages = document.getElementById('logMessages');
+            const li = document.createElement('li');
+            li.className = `log-item ${type}`;
+
+            const titleDiv = document.createElement('div');
+            titleDiv.className = "log-item-title";
+            titleDiv.innerHTML = `<span>${message}</span>`;
+            li.appendChild(titleDiv);
+
+            if (codeSnippet) {
+                const pre = document.createElement('div');
+                pre.className = "code-box";
+                pre.textContent = codeSnippet;
+                li.appendChild(pre);
+            }
+
+            logMessages.appendChild(li);
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function resetForm() {
+            document.getElementById('originalFile').value = '';
+            document.getElementById('oldTranslationFile').value = '';
+            document.getElementById('translatedText').value = '';
+
+            loadedFiles.original = null;
+            loadedFiles.old = null;
+            salvagedObjects = { original: null, old: null };
+
+            updateFileDisplay('original', null);
+            updateFileDisplay('old', null);
+
+            accumulatedTranslations = {};
+            activeMissingKeysMap = {};
+            currentRoundNumber = 0;
+            completedRoundsHistory = [];
+            totalEstimatedRounds = 1;
+
+            initPixelForge();
+            document.getElementById('logArea').style.display = 'none';
+            finalJsonString = "";
+            showToast("Форму та файли очищено!", "info");
         }
 
         function insertMockData() {
-            document.getElementById('translatedText').value = `{\n  "block.hexcasting.slate": "Сланцева скрижаль",\n  "item.hexcasting.wand": "Чарівний жезл кастування",\n  "spell.hexcasting.teleport": "Телепортація крізь простір"\n}`;
-            showToast("Приклад вставлено в поле перекладу", "info");
-        }
-
-        function showToast(message, type = "info") {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            
-            let iconSvg = '';
-            if (type === 'success') {
-                iconSvg = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
-            } else if (type === 'error') {
-                iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>';
-            } else {
-                iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>';
-            }
-
-            toast.innerHTML = `${iconSvg} <span>${message}</span>`;
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(-10px)';
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
+            document.getElementById('translatedText').value = 
+`  "item.minecraft.diamond_sword": "Діамантовий меч",\n` +
+`  "block.minecraft.beacon": "Маяк",\n` +
+`  "item.minecraft.netherite_ingot": "Незеритовий злиток"`;
+            showToast("Тестовий фрагмент вставлено!", "info");
         }
     </script>
 </body>
