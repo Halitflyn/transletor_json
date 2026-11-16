@@ -968,6 +968,10 @@
                     </div>
                     <div class="file-dropzone-text" id="dropzoneOldText">Перетягніть uk_ua.json (необов'язково)</div>
                     <div class="file-dropzone-name" id="dropzoneOldName"></div>
+                    <button type="button" id="acceptIdenticalBtn" class="btn-secondary"
+                            style="margin-top:10px; width:100%;" onclick="toggleAcceptIdentical()">
+                        ☐ Весь вміст перекладено
+                    </button>
                 </div>
             </div>
         </div>
@@ -1141,6 +1145,7 @@
         let salvagedObjects = { original: null, old: null };
         let activeMissingKeysMap = {};
         let confirmActionCallback = null;
+        let acceptIdentical = false;
 
         // Rounds tracking & Pixel Forge State
         let currentRoundNumber = 0;
@@ -1859,7 +1864,7 @@
                     if (Object.prototype.hasOwnProperty.call(oldTranslationObj, key)) {
                         const oldVal = String(oldTranslationObj[key] || "");
                         // Вважаємо перекладеним тільки якщо значення відрізняється від оригіналу або є чисто технічним
-                        if (oldVal !== origVal || /^[0-9\s.,:%_{}§+\-*\/\\#@!?()]+$/.test(origVal)) {
+                       if (isTranslatedValue(origVal, oldVal)) {
                             translatedKeys++;
                             translatedChars += origVal.length;
                         } else {
@@ -1938,6 +1943,24 @@
                 remainingCount: keys.length - count
             };
         }
+        
+        function isTranslatedValue(origVal, oldVal) {
+    if (acceptIdentical) return true;
+    return oldVal !== origVal || /^[0-9\s.,:%_{}§+\-*\/\\#@!?()]+$/.test(origVal);
+}
+
+function toggleAcceptIdentical() {
+    acceptIdentical = !acceptIdentical;
+    const btn = document.getElementById('acceptIdenticalBtn');
+    btn.textContent = acceptIdentical ? '✔ Весь вміст перекладено' : '☐ Весь вміст перекладено';
+    btn.className = acceptIdentical ? 'btn-success' : 'btn-secondary';
+    btn.style.marginTop = '10px';
+    btn.style.width = '100%';
+    showToast(acceptIdentical
+        ? 'Рядки, що збігаються з оригіналом, тепер вважаються перекладеними'
+        : 'Режим вимкнено', acceptIdentical ? 'success' : 'info');
+    if (loadedFiles.original) analyzeJSONs();
+}
 
         function showBatchPrompt(itemsMap) {
             const charLimitInput = document.getElementById('batchCharLimit');
@@ -2088,7 +2111,7 @@
                         const oldVal = String(oldTranslationObj[key] || "");
                         finalObj[key] = oldTranslationObj[key];
                         
-                        if (oldVal !== origVal || /^[0-9\s.,:%_{}§+\-*\/\\#@!?()]+$/.test(origVal)) {
+                        if (isTranslatedValue(origVal, oldVal)) {
                             fromOldCount++;
                             translatedTextChars += charLen;
                         } else {
@@ -2243,6 +2266,13 @@
             document.getElementById('logArea').style.display = 'none';
             finalJsonString = "";
             showToast("Форму та файли очищено!", "info");
+
+            acceptIdentical = false;
+const aib = document.getElementById('acceptIdenticalBtn');
+aib.textContent = '☐ Весь вміст перекладено';
+aib.className = 'btn-secondary';
+aib.style.marginTop = '10px';
+aib.style.width = '100%';
         }
 
         function insertMockData() {
