@@ -902,6 +902,17 @@
         </div>
     </div>
 
+<div id="smartModal" class="modal-backdrop">
+    <div class="modal-box" style="position:relative; text-align:center;">
+        <button type="button" class="btn-text" onclick="closeSmartModal()"
+                style="position:absolute; top:10px; right:12px; font-size:20px;">✕</button>
+        <div class="modal-title">⚡ Смарт-режим</div>
+        <div class="modal-text" id="smartStatus"></div>
+        <button type="button" id="smartMainBtn" class="btn-cyan"
+                style="width:100%; padding:30px 18px; font-size:17px;" onclick="smartStep()"></button>
+    </div>
+</div>
+
     <div class="container">
         <header>
             <div class="logo-wrap">
@@ -1026,6 +1037,10 @@
             </button>
         </div>
 
+        <button type="button" class="btn-success" style="width:100%; margin-bottom:24px;" onclick="openSmartModal()">
+            ⚡ Смарт-режим (в один клік)
+        </button>
+
         <div id="logArea" class="dashboard-container">
             <div class="dashboard-header">
                 <div class="dashboard-title">
@@ -1145,7 +1160,11 @@
         let salvagedObjects = { original: null, old: null };
         let activeMissingKeysMap = {};
         let confirmActionCallback = null;
+        
         let acceptIdentical = false;
+        let lastPromptText = "";
+        let smartBusy = false;
+        let smartDone = false;
 
         // Rounds tracking & Pixel Forge State
         let currentRoundNumber = 0;
@@ -1962,6 +1981,101 @@ function toggleAcceptIdentical() {
     if (loadedFiles.original) analyzeJSONs();
 }
 
+        function openSmartModal() {
+    updateSmartUI();
+    document.getElementById('smartModal').style.display = 'flex';
+}
+
+function closeSmartModal() {
+    document.getElementById('smartModal').style.display = 'none';
+}
+
+function updateSmartUI() {
+    const status = document.getElementById('smartStatus');
+    const btn = document.getElementById('smartMainBtn');
+    const left = Object.keys(activeMissingKeysMap).length;
+    const pct = document.getElementById('circlePercentage').textContent;
+
+    if (smartDone) {
+        status.innerHTML = `🎉 Переклад завершено на <strong>${pct}</strong> за ${currentRoundNumber} кругів.`;
+        btn.textContent = '⬇ Завантажити uk_ua.json';
+        btn.className = 'btn-success';
+    } else if (!lastPromptText) {
+        status.innerHTML = 'Спочатку завантажте файли в кроки 1 і 2. Кнопка проаналізує їх і скопіює першу порцію для ШІ.';
+        btn.textContent = '▶ Старт: аналіз і копіювання першої порції';
+        btn.className = 'btn-cyan';
+    } else {
+        status.innerHTML = `Круг <strong>#${currentRoundNumber + 1}</strong> · готово ${pct} · залишилось <strong>${left}</strong> рядків.<br>` +
+            `Вставте порцію в ШІ, скопіюйте його відповідь і натисніть кнопку.`;
+        btn.textContent = '📋 Вставити відповідь → застосувати → скопіювати наступну';
+        btn.className = 'btn-cyan';
+    }
+}
+
+async function copyToClipboard(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+    } catch (e) {
+        executeCopy(text);
+    }
+}
+
+async function smartStep() {
+    if (smartBusy) return;
+    smartBusy = true;
+    try {
+        if (smartDone) { downloadJSON(); return; }
+
+        // Перший клік: аналіз і копіювання першої порції
+        if (!lastPromptText) {
+            await analyzeJSONs();
+            if (!lastPromptText) return;
+            await copyToClipboard(lastPromptText);
+            showToast('Першу порцію скопійовано. Вставте її в ШІ!', 'success');
+            return;
+        }
+
+        // Наступні кліки: читаємо відповідь ШІ з буфера
+        let clip = '';
+        try {
+            clip = await navigator.clipboard.readText();
+        } catch (e) {
+            showToast('Браузер не дав доступ до буфера. Дозвольте його або вставте відповідь у Крок 3 вручну.', 'error');
+            return;
+        }
+
+        if (!clip.trim()) {
+            showToast('Буфер порожній. Скопіюйте відповідь ШІ.', 'warning');
+            return;
+        }
+        if (clip.trim() === lastPromptText.trim()) {
+            showToast('У буфері досі ваш запит, а не відповідь ШІ!', 'warning');
+            return;
+        }
+        if (!/"[^"]+"\s*:\s*"/.test(clip)) {
+            showToast('У буфері немає пар "ключ": "переклад". Це точно відповідь ШІ?', 'warning');
+            return;
+        }
+
+        document.getElementById('translatedText').value = clip;
+        const roundBefore = currentRoundNumber;
+        await processTranslation();
+        if (currentRoundNumber === roundBefore) return;
+
+        if (Object.keys(activeMissingKeysMap).length === 0) {
+            smartDone = true;
+            lastPromptText = '';
+            showToast('Все перекладено! Можна завантажувати файл.', 'success');
+        } else {
+            await copyToClipboard(lastPromptText);
+            showToast('Наступну порцію скопійовано. Вставте її в ШІ!', 'success');
+        }
+    } finally {
+        smartBusy = false;
+        updateSmartUI();
+    }
+}
+        
         function showBatchPrompt(itemsMap) {
             const charLimitInput = document.getElementById('batchCharLimit');
             const limit = parseInt(charLimitInput.value, 10) || 3500;
@@ -1977,6 +2091,7 @@ function toggleAcceptIdentical() {
 
             const promptHeader = `Переклади ці рядки українською мовою для гри Minecraft. Збережи назви ключів, змінні %s, %d, {0}, {1} та кольорові коди §. Поверни у форматі JSON ("ключ": "переклад",):\n\n`;
             const fullPromptText = promptHeader + '{\n' + batch.batchLinesText.replace(/,$/, '') + '\n}';
+            lastPromptText = fullPromptText;
             const rawLinesOnly = batch.batchLinesText;
 
             const cardLi = document.createElement('li');
@@ -2273,6 +2388,9 @@ aib.textContent = '☐ Весь вміст перекладено';
 aib.className = 'btn-secondary';
 aib.style.marginTop = '10px';
 aib.style.width = '100%';
+
+            lastPromptText = "";
+            smartDone = false;
         }
 
         function insertMockData() {
